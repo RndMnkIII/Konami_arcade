@@ -1,0 +1,16 @@
+﻿"Symbol";"Value";"Unit";
+"REFERENCE";"1729018";"";
+"TraceParts.PartVersion";"1.0.4";"";
+"SUPPLIER";"Phoenix Contact";"";
+"TraceParts.PartStatus";"Published";"";
+"RS_STOCK_NUMBER";"8020617";"";
+"TraceParts.PartLanguage";"en";"";
+"DESIGN";"Low profile PCB terminal block,5mm,2 way";"";
+"TraceParts.InstanceId";"10-25072014-100574AJD8QEV83NSUV6HIHTXOCXTEQ";"";
+"TraceParts.PartTitle";"Low profile PCB terminal block,5mm,2 way";"";
+"TRACEPARTS";"TRACEPARTS";"";
+"TIMESTAMP";"22/07/2014 15:51";"";
+"REVISION";"A";"";
+"TraceParts.PartNumber";"10-25072014-100574";"";
+"TraceParts.PartStatusId";"";"";
+"TraceParts.ClassPath";"RS_COMPONENTS:/F_RS_COMPONENTS/PSSS_435563/PSS_435683/PSF_435707/10-25072014-100574";"";

@@ -1,0 +1,13 @@
+﻿"Symbol";"Value";"Unit";
+"TraceParts.PartNumber";"10-23062010-091210";"";
+"REFERENCE";"A-BL254-DG-G40D";"";
+"TraceParts.PartTitle";"Female header, pitch 2.54mm, straight, double row, 04 - 80 contacts";"";
+"TraceParts.InstanceId";"10-23062010-0912103A2V5NDKGJ222U7DUBTCPWG1C";"";
+"DESIGN";"Female header, pitch 2.54mm, straight, double row, 40 contacts, plating : Gold flash";"";
+"TraceParts.PartStatus";"Published";"";
+"TraceParts.PartStatusId";"";"";
+"SUPPLIER";"ASSMANN WSW components";"";
+"TraceParts.PartVersion";"1.1.6";"";
+"TRACEPARTS";"TRACEPARTS";"";
+"TraceParts.PartLanguage";"en";"";
+"TraceParts.ClassPath";"ASSMANN:/F_ASSMANN/ASSMANN.010/ASSMANN.010.170/10-23062010-091210";"";

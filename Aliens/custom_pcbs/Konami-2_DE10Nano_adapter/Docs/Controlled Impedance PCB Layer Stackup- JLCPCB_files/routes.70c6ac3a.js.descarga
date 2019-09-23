@@ -1,0 +1,317 @@
+/**
+ * Created by win7 on 2017/10/12.
+ */
+/**
+ * routes.js路由模块
+ */
+define(["/client/js/app.95c4fff4.js?ver=2",'/client/js/common.55d27a3f.js'], function (app,common) {
+    //app是Angular应用对象
+    app.config(
+        function ($routeProvider,$httpProvider,$compileProvider) {
+            /*动态链接---unsafe*/
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|javascript?|ftp|mailto|chrome-extension):/);
+            $routeProvider
+                .when('/', {//下单页
+                    templateUrl: '/client/template/placeOrder/quote.8d889f06.html',
+                    controller: 'quoteCtrl',
+                    controllerUrl: '/client/js/controllers/placeOrder/quoteCtrl.5cc972f6.js'
+                })
+                .when('/order', {//订单列表
+                    templateUrl: '/client/template/mine/order.36d1852b.html?ver=3',
+                    controller: 'orderCtrl',
+                    controllerUrl: '/client/js/controllers/mine/orderCtrl.602598c5.js'
+             /*       dependencies: ['directive/orderDirective']*/
+                })
+                .when('/orderDetails', {//订单详情
+                    templateUrl: '/client/template/mine/orderDetails.72a062f2.html',
+                    controller: 'orderDetailsCtrl',
+                    controllerUrl: '/client/js/controllers/mine/orderDetailsCtrl.91ff3d1d.js'
+                })
+                .when('/payMethod', {//支付方式
+                    templateUrl: '/client/template/payment/payMethod.500e3041.html',
+                    controller: 'payMethodCtrl',
+                    controllerUrl: '/client/js/controllers/payment/payMethodCtrl.09f5ba47.js'
+                })
+                .when('/paySave', {//先审后付（保存订单）
+                    templateUrl: '/client/template/payment/paySave.d4d85d2f.html',
+                    controller: 'paySaveCtrl',
+                    controllerUrl: '/client/js/controllers/payment/paySaveCtrl.a5350a93.js'
+                })
+                .when('/payResult', {//支付结果
+                    templateUrl: '/client/template/payment/payResult.2a068601.html',
+                    controller: 'payResultCtrl',
+                    controllerUrl: '/client/js/controllers/payment/payResultCtrl.c1109fa0.js'
+                })
+                .when('/paypalReview', {//paypal支付查看
+                    templateUrl: '/client/template/payment/paypalReview.dff67cba.html',
+                    controller: 'paypalReviewCtrl',
+                    controllerUrl: '/client/js/controllers/payment/paypalReviewCtrl.ed3746fe.js'
+                })
+                .when('/paypalReturn', {//paypal支付结果
+                    templateUrl: '/client/template/payment/paypalReturn.6a239ba6.html',
+                    controller: 'paypalReturnCtrl',
+                    controllerUrl: '/client/js/controllers/payment/paypalReturnCtrl.aa88b6c0.js'
+                })
+                .when('/supplement', {//补款页
+                    templateUrl: '/client/template/payment/supplement.befbdc91.html',
+                    controller: 'supplementCtrl',
+                    controllerUrl: '/client/js/controllers/payment/supplementCtrl.a46fbcb9.js'
+                })
+                .when('/afterSale', {//售后服务
+                    templateUrl: '/client/template/mine/afterSale.0bd509aa.html',
+                    controller: 'afterSaleCtrl',
+                    controllerUrl: '/client/js/controllers/mine/afterSaleCtrl.2de14e96.js'
+                })
+                .when('/afterSaleResult', {//售后服务结果
+                    templateUrl: '/client/template/mine/afterSaleResult.1592acd1.html',
+                    controller: 'afterSaleResultCtrl',
+                    controllerUrl: '/client/js/controllers/mine/afterSaleResultCtrl.49b4e9fc.js'
+                })
+                .when('/cart', {//购物车
+                    templateUrl: '/client/template/shoppingCart/cart.93488997.html?ver=2',
+                    controller: 'cartCtrl',
+                    controllerUrl: '/client/js/controllers/shoppingCart/cartCtrl.47671e7f.js'
+                })
+                .when('/cartEdit', {//购物车修改页
+                    templateUrl: '/client/template/shoppingCart/cartEdit.f39e66c6.html',
+                    controller: 'cartEditCtrl',
+                    controllerUrl: '/client/js/controllers/shoppingCart/cartEditCtrl.bec579dc.js'
+                })
+                .when('/quote', {//下单页
+                    templateUrl: '/client/template/placeOrder/quote.8d889f06.html',
+                    controller: 'quoteCtrl',
+                    controllerUrl: '/client/js/controllers/placeOrder/quoteCtrl.5cc972f6.js'
+                })
+                .when('/address', {//地址页
+                    templateUrl: '/client/template/mine/address.0c9d8e73.html',
+                    controller: 'addressCtrl',
+                    controllerUrl: '/client/js/controllers/mine/addressCtrl.6ee59daa.js'
+                })
+                .when('/addressEdit', {//地址添加、修改页
+                    templateUrl: '/client/template/mine/addressEdit.012e05d2.html',
+                    controller: 'addressEditCtrl',
+                    controllerUrl: '/client/js/controllers/mine/addressEditCtrl.d514c4b6.js'
+                })
+                .when('/invoice', {//发票信息
+                    templateUrl: '/client/template/mine/invoice.ae200d4d.html',
+                    controller: 'invoiceCtrl',
+                    controllerUrl: '/client/js/controllers/mine/invoiceCtrl.43d2acd2.js'
+                })
+                .when('/impedance', {//阻焊说明
+                    templateUrl: '/client/template/placeOrder/impedance.e31a694f.html',
+                    controller: 'impedanceCtrl',
+                    controllerUrl: '/client/js/controllers/placeOrder/impedanceCtrl.e38ec288.js'
+                })
+                .when('/impedanceCalculation', {//阻焊神器
+                    templateUrl: '/client/template/placeOrder/impedanceCalculation.783510a0.html',
+                    controller: 'impedanceCalculationCtrl',
+                    controllerUrl: '/client/js/controllers/placeOrder/impedanceCalculationCtrl.cf2ec10f.js'
+                })
+                .when('/account', {//账户中心
+                    templateUrl: '/client/template/account/account.abcef999.html',
+                    controller: 'accountCtrl',
+                    controllerUrl: '/client/js/controllers/account/accountCtrl.2e44cd48.js'
+                })
+                .when('/transactions', {//余额消费
+                    templateUrl: '/client/template/account/transactions.08f2a487.html',
+                    controller: 'transactionsCtrl',
+                    controllerUrl: '/client/js/controllers/account/transactionsCtrl.8bfe72a8.js'
+                })
+                .when('/topUp', {//充值中心
+                    templateUrl: '/client/template/account/topUp.7bf5c996.html',
+                    controller: 'topUpCtrl',
+                    controllerUrl: '/client/js/controllers/account/topUpCtrl.28bbae2d.js'
+                })
+                .when('/topUpSuccess', {//充值成功
+                    templateUrl: '/client/template/account/topUpSuccess.fc814575.html',
+                    controller: 'topUpSuccessCtrl',
+                    controllerUrl: '/client/js/controllers/account/topUpSuccessCtrl.110cd758.js'
+                })
+                .when('/billing', {//账单列表
+                    templateUrl: '/client/template/account/billing.d4e2c3fd.html',
+                    controller: 'billingCtrl',
+                    controllerUrl: '/client/js/controllers/account/billingCtrl.71f26776.js'
+                })
+                .when('/account/jpayActive', {//未激活页
+                    templateUrl: '/client/template/account/jpayActive.235564a3.html',
+                    controller: 'jpayActiveCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpayActiveCtrl.e781743b.js'
+                })
+                .when('/account/jpayActive/verifyEmail', {//激活流程 验证邮件
+                    templateUrl: '/client/template/account/jpayVerifyEmail.88e35bd3.html',
+                    controller: 'jpayVerifyEmailCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpayVerifyEmailCtrl.4a788080.js'
+                })
+                .when('/account/jpayActive/setPassword', {//激活流程 设置支付密码
+                    templateUrl: '/client/template/account/jpaySetPassword.328fae4b.html',
+                    controller: 'jpaySetPasswordCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpaySetPasswordCtrl.2c5cd7ea.js'
+                })
+                .when('/account/jpayActive/success', {//激活流程 激活成功
+                    templateUrl: '/client/template/account/jpayOperationSuccess.4934d1cd.html',
+                    controller: 'jpayOperationSuccessCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpayOperationSuccessCtrl.281f9720.js'
+                })
+                .when('/account/jpayResetPassword/verifyEmail', {//重置密码 验证邮件
+                    templateUrl: '/client/template/account/jpayVerifyEmail.88e35bd3.html',
+                    controller: 'jpayVerifyEmailCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpayVerifyEmailCtrl.4a788080.js'
+                })
+                .when('/account/jpayResetPassword/setPassword', {//重置密码 设置支付密码
+                    templateUrl: '/client/template/account/jpaySetPassword.328fae4b.html',
+                    controller: 'jpaySetPasswordCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpaySetPasswordCtrl.2c5cd7ea.js'
+                })
+                .when('/account/jpayResetPassword/success', {//重置密码 激活成功
+                    templateUrl: '/client/template/account/jpayOperationSuccess.4934d1cd.html',
+                    controller: 'jpayOperationSuccessCtrl',
+                    controllerUrl: '/client/js/controllers/account/jpayOperationSuccessCtrl.281f9720.js'
+                })
+                .when('/ourTeam', {//团队介绍
+                    templateUrl: '/client/template/ourTeam/ourTeam.178a1464.html',
+                    controller: 'ourTeamCtrl',
+                    controllerUrl: '/client/js/controllers/ourTeam/ourTeamCtrl.3b9b4c73.js'
+                })
+                .when('/coupon', {//我的优惠券
+                    templateUrl: '/client/template/account/coupon.b8abac2e.html',
+                    controller: 'couponCtrl',
+                    controllerUrl: '/client/js/controllers/account/couponCtrl.6e9abe60.js'
+                })
+
+                /*  .when('/home', {//首页
+                    templateUrl: '/client/template/home/home.html',
+                    controller: 'homeCtrl',
+                    controllerUrl: '/client/js/controllers/home/homeCtrl.js'
+                })
+                .when('/bigPic', {//首页产品大图
+                    templateUrl: '/client/template/home/bigPic.html',
+                    controller: 'homeCtrl',
+                    controllerUrl: '/client/js/controllers/home/homeCtrl.js'
+                })
+                .when('/capabilities', {//属性列表
+                    templateUrl: '/client/template/home/capabilities.html',
+                    controller: 'capabilitiesCtrl',
+                    controllerUrl: '/client/js/controllers/home/capabilitiesCtrl.js'
+                })
+               */
+
+                .when('/smtQuote', {//smt下单
+                    templateUrl: '/client/template/placeOrder/smtQuote.4b55c681.html',
+                    controller: 'smtQuoteCtrl',
+                    controllerUrl: '/client/js/controllers/placeOrder/smtQuoteCtrl.9fe5d009.js'
+                })
+                .when('/parts', {//可贴片元器件
+                    templateUrl: '/client/template/smtComponent/mountableElement.83584128.html',
+                    controller: 'mountableElementCtrl',
+                    controllerUrl: '/client/js/controllers/smtComponent/mountableElementCtrl.dbdb7282.js'
+                })
+                .when('/parts/componentSearch', {//分类搜索
+                    templateUrl: '/client/template/smtComponent/componentSearch.057026e8.html',
+                    controller: 'componentSearchCtrl',
+                    controllerUrl: '/client/js/controllers/smtComponent/componentSearchCtrl.860a80d3.js'
+                })
+
+
+                .otherwise({ redirectTo: '/quote' });
+            //Http Intercpetor to check auth failures for xhr requests
+            $httpProvider.interceptors.push('authHttpResponseInterceptor');
+        });
+    app.run(function ($rootScope, $location, GoogleTagManager, TwitterTag) {
+        common.loadingModal();
+        /* 监听路由的状态变化 */
+        $rootScope.$on('$routeChangeStart', function(evt, next, current){
+            /*关闭弹框*/
+            common.hideModal(".modal");
+            /*不需要登录*/
+            if (next.$$route.originalPath == "/impedance" || next.$$route.originalPath == "/impedanceCalculation"||next.$$route.originalPath == "/ourTeam"||next.$$route.originalPath == "/"||next.$$route.originalPath == "/quote"||next.$$route.originalPath.indexOf("/parts")!=-1) {
+                window.noLogin=true;
+            }else{
+                window.noLogin=false;
+            }
+            if(next.$$route.originalPath == "/payMethod"||next.$$route.originalPath == "/supplement"||next.$$route.originalPath.indexOf("/parts")!=-1){
+                /*eda背景颜色去掉,支付也去掉头部，底部*/
+                angular.element(".minHead,.commonFooter").hide();
+            }else{
+                angular.element(".minHead,.commonFooter").show();
+            }
+            /*滚动到顶部*/
+            cancelAnimationFrame(timer);
+            var timer = requestAnimationFrame(function fn(){
+                var oTop = document.body.scrollTop || document.documentElement.scrollTop;
+                if(oTop > 0){
+                    document.body.scrollTop = document.documentElement.scrollTop = oTop - 50;
+                    timer = requestAnimationFrame(fn);
+                }else{
+                    cancelAnimationFrame(timer);
+                }
+            });
+        });
+        $rootScope.$on('$routeChangeSuccess', function(evt, current, previous) {
+            //console.log('路由 ：'+$location.path());
+            if (current.$$route.originalPath == "/impedance") {
+                $("title").html("Controlled Impedance PCB Layer Stackup- JLCPCB");
+                $("meta[name='description']").attr("content", "JLCPCB offers High-precision Multilayer PCB with impedance control at no extra charge. Learn about our PCB laminate material and controlled impedance layer stackup here.");
+                $("meta[name='keywords']").attr("content", "controlled impedance pcb,Impedance Controlled PCBs,controlled impedance circuit board,impedance control service,controlled impedance stackup");
+            } else {
+                $("title").html("PCB Prototype & PCB Fabrication Manufacturer - JLCPCB");
+                $("meta[name='keywords']").attr("content", "PCB manufacturing, circuit board, PCB fabrication, pcb board, printed circuit board manufacturers, custom circuit board, pcb board, printed circuit board");
+                $("meta[name='description']").attr("content", "China's Largest PCB Prototype Manufacturer, offers 24 hours Quick Turn PCB prototype and Reliable small-batch PCB production.");
+            }
+            if (current.$$route.originalPath.indexOf("/parts")!=-1) {
+                $("title").html("JLCSMT Parts Library");
+            }
+        });
+        $rootScope.$on('$viewContentLoaded', function() {
+            /*google*/
+            var path= $location.path(),
+                absUrl = $location.absUrl(),
+                virtualUrl = absUrl.substring(absUrl.indexOf(path));
+            GoogleTagManager.push({ event: 'virtualPageView', virtualUrl: virtualUrl });
+            /*twitter*/
+            TwitterTag.loadTwitter();
+        });
+    });
+    app.factory('authHttpResponseInterceptor', function ($rootScope, $q, $timeout,$routeParams) {
+        //拦截器配置
+        return {
+            request: function (config) {
+                return config || $q.when(config);
+            },
+            response: function(response){
+                //请求返回异常类型判
+                if (response.status == 203||response.status == 403) {
+                    window.nologinStatus=true;//未登录
+                    if(!window.noLogin){
+                        common.noticeModal("You aren't logged in. <a class='blue' href='/auth/login'>Please login.</a>");
+                        window.location.href = '/auth/login';//跳转登录
+                    }
+                } else if (response.status == 404&&(response.config&&response.config.url.indexOf("html")!=-1||response.config&&response.config.url.indexOf(".js")!=-1)) {
+                    /*更新了服务，刷新页面*/
+                    window.location.reload();
+                } else if (response.status != 200) {
+                    $timeout(function(){
+                        common.noticeModal("The network is busy. Please try again later."+response.config?response.config.url:''+" status:"+response.status);
+                    },0);
+                }
+                return response || $q.when(response);
+            },
+            responseError: function(rejection) {
+                //请求返回异常类型判断
+                if (rejection.status == 203||rejection.status == 403) {
+                    if(!window.noLogin){
+                        common.noticeModal("You aren't logged in. <a class='blue' href='/auth/login'>Please login.</a>");
+                        window.location.href = '/auth/login';//跳转登录
+                    }
+                }else if (response.status == 404&&(response.config&&response.config.url.indexOf("html")!=-1||response.config&&response.config.url.indexOf(".js")!=-1)) {
+                    /*更新了服务，刷新页面*/
+                    window.location.reload();
+                } else if (rejection.status != 200) {
+                    $timeout(function(){
+                        common.noticeModal("The network is busy. Please try again later."+response.config?response.config.url:''+" status:"+rejection.status);
+                    },0);
+                }
+                return $q.reject(rejection);
+            }
+        };
+    })
+});

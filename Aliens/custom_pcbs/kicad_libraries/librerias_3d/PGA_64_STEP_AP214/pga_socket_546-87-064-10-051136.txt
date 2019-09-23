@@ -1,0 +1,14 @@
+﻿"Symbol";"Value";"Unit";
+"REFERENCE";"546-87-064-10-051136";"";
+"TraceParts.PartVersion";"1.0.8";"";
+"SUPPLIER";"preci-dip";"";
+"TraceParts.PartStatus";"Published";"";
+"DESIGN";"PGA sockets with solderless compliant press-fit terminations for 1.5 to 2.0 mm PCB thickness., 10x10 pins, 64 contacts, Tin / Flash gold";"";
+"TraceParts.PartNumber";"10-03082015-074693";"";
+"TraceParts.PartLanguage";"en";"";
+"OMNICLASS23";"23.35.27.13";"";
+"TraceParts.InstanceId";"10-03082015-07469378D5V9HMO7TLWHEM7Q94QSHAY";"";
+"TraceParts.PartTitle";"PGA sockets with solderless compliant press-fit terminations for 1.5 to 2.0 mm PCB thickness.";"";
+"TRACEPARTS";"TRACEPARTS";"";
+"TraceParts.PartStatusId";"";"";
+"TraceParts.ClassPath";"";"";

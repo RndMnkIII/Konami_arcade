@@ -1,0 +1,1042 @@
+/**
+ * Created by win7 on 2017/10/16.
+ */
+define(["angular","/client/js/common.55d27a3f.js","/client/js/directive/directiveModule.a477eb07.js",'echarts'], function (angular,common,directiveModule,echarts) {
+    /*订单列表search*/
+    directiveModule.directive('search', function() {
+        return {
+            restrict : 'EA',
+            replace : false,
+            scope : {
+                codeSearch : '&',
+                searchOrder : '&',
+                searchTxt: '='
+            },
+            template: ' <div class="input-group ">'+
+                '<input ng-model="searchTxt" ng-keypress="codeSearch({event:$event})" type="text" class="form-control input-sm searchTxt" placeholder="Search for...">'+
+                '<span class="input-group-btn ">'+
+                '<button ng-click="searchOrder()" class="btn btn-default bgSearch input-sm" type="button">&nbsp;</button>'+
+                '</span>'+
+            '</div>',
+            link:function(scope){}
+        }
+    });
+    /*个人中心菜单*/
+    directiveModule.directive('mineLeftMenu', function() {
+        return {
+            restrict : 'EA',
+            scope : {
+                headImg : '@',
+                username: '@'
+            },
+            replace : false,
+            templateUrl: '/client/template/component/mineLeftMenu.69b243f0.html',
+            controller: function ($scope, httpService, httpApi, $rootScope, $location) {
+                /*是否开启jpay账户(是:yes; 否:no*/
+                httpService.getApi(httpApi.isOpenJpayAccount, function (dat) {
+                    $scope.isOpenJpayAccount = dat.message;
+                    if ($scope.isOpenJpayAccount == 'yes') {
+                        /*查询jpay账户是否激活 和账户余额*/
+                        httpService.getApi(httpApi.queryJpayAccountInfo, function (data) {
+                            $scope.jpayAccountStatus = data.jpayAccountStatus;
+                        });
+                    }
+                });
+                $scope.rootUrl=httpApi.rootUrl;//根域名
+                /*开关*/
+                var setInter=setInterval(function(){
+                    if($rootScope.webSourceSwitch){
+                        $scope.webSourceSwitch=$rootScope.webSourceSwitch;
+                        clearInterval(setInter)
+                    }
+                },1000);
+                $scope.jlcpcbUrl=encodeURIComponent("https://www.jlcpcb.com");
+
+                $scope.currentPath=$location.path();
+                if($scope.currentPath.indexOf('address') != -1){
+                    $scope.isAddress=true;
+                }
+                if ($scope.currentPath.indexOf('account') != -1 || $scope.currentPath.indexOf('transactions') != -1 || $scope.currentPath.indexOf('topUp') != -1 || $scope.currentPath.indexOf('topUpSuccess') != -1 || $scope.currentPath.indexOf('billing') != -1|| $scope.currentPath.indexOf('coupon') != -1) {
+                    $scope.isAccount = true;
+                }
+                if ($scope.currentPath.indexOf('account') != -1 || $scope.currentPath.indexOf('transactions') != -1 || $scope.currentPath.indexOf('topUp') != -1 || $scope.currentPath.indexOf('topUpSuccess') != -1) {
+                    $scope.isJpay = true;
+                }
+
+            },
+            link:function(scope,element,attr){}
+        }
+    });
+    /*商品详情列表list*/
+    directiveModule.directive('productOneDetail', function() {
+        return {
+            restrict : 'EA',
+            scope : {
+                list : '=',//列表
+                itemActive:"=",//选中的item
+                smtList:"=",//
+                smtListIndex:"=",
+                getSmtOrderDetail:'&',//删除方法
+                item:"=",//当前点击item
+            },
+            replace : false,
+            templateUrl: '/client/template/component/productOneDetail.e726e67d.html',
+            controller:function($scope,httpService,httpApi,$rootScope){
+                $scope.rootUrl=httpApi.rootUrl;//根域名
+                /*新列表*/
+                $scope.form={
+                    selectqtylist:[5,10,15,20,25,30,50,75,100,125,150,200,250,300,400,450,500,600,700,800,900,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,25000,30000,40000,50000,60000,70000,80000],//数量
+                };
+                /*返单数量验证*/
+                $scope.checkNumber=function(item){
+                    if(item.stencilCountsReorder){
+                        item.stencilCountsReorder=item.stencilCountsReorder.toString().replace(/[^\d\.]/g,'');//stencilCountsReorder
+                    }
+                };
+                /*显示返单数量弹框*/
+                $scope.showQtylist=function(itemChild){
+                    itemChild.qtylist=!itemChild.qtylist;
+
+                };
+                /*返单选中数量*/
+                $scope.chose=function(listItem,itemChild){
+                    itemChild.stencilCountsReorder=listItem;//赋值
+                    itemChild.qtylist=false;//隐藏下拉框
+                };
+                /*返单提交*/
+                $scope.reorder=function(event,item){
+                    httpService.postApi(httpApi.saveReorder,{
+                        produceOrderNum:item.produceOrderNum,
+                        stencilCounts:item.stencilCountsReorder
+                    },function(data){
+                       // console.log(data);
+                        if(data==200){
+                            /*效果*/
+                            var top=event.clientY+(document.documentElement.scrollTop || document.body.scrollTop);
+                            var left=event.clientX;
+                            $(".reorderSuccess").css({
+                                display:"block",
+                                top:top+5,
+                                left:left,
+                                opacity: 1
+                            });
+                            $(".reorderSuccess").animate({
+                                display:"none",
+                                top:"70px",
+                                left:$(".w1300").offset().left+980,
+                                opacity: 'hide'
+                            },1000);
+                            item.hasOrder=true;//隐藏输入框
+                            //common.alertModal('Reorder Success');
+                            $rootScope.userInfo.cartNum+=1;//购物车数量加1；
+                        }else{
+                            common.alertModal('Reorder Failure');
+                        }
+                    });
+
+
+                };
+                /*返单锁单提示*/
+                $scope.showNotice=function(){
+                    common.alertModal("The order has quality problems after sale, and it is not allowed to return the order");
+                };
+                /*订单详情弹框*/
+                $scope.orderNumber=function(item){
+                    if(item.orderType!=3){
+                        /*pcb*/
+                        if(item.detail.pcbDetail.historyStencilWitdh>0 && item.detail.pcbDetail.historyStencilLength>0){
+                            item.detail.pcbDetail.stencilWidth = Math.round(item.detail.pcbDetail.historyStencilWitdh);
+                            item.detail.pcbDetail.stencilLength = Math.round(item.detail.pcbDetail.historyStencilLength);
+                        }else{
+                            //是否有工艺边
+                            if(item.detail.pcbDetail.sestencilCountX>1 || item.detail.pcbDetail.sestencilCountY>1){
+                                if(item.detail.pcbDetail.stencilWidth>item.detail.pcbDetail.stencilLength){
+                                    item.detail.pcbDetail.stencilWidth = Math.round(item.detail.pcbDetail.stencilWidth-10);
+                                }else{
+                                    item.detail.pcbDetail.stencilLength =Math.round( item.detail.pcbDetail.stencilLength-10);
+                                }
+                            }
+                            if(item.detail.pcbDetail.sestencilCountX>0){
+                                item.detail.pcbDetail.stencilWidth = Math.round(item.detail.pcbDetail.stencilWidth/item.detail.pcbDetail.sestencilCountX);
+                            }
+                            if(item.detail.pcbDetail.sestencilCountY>0){
+                                item.detail.pcbDetail.stencilLength =Math.round( item.detail.pcbDetail.stencilLength/item.detail.pcbDetail.sestencilCountY);
+                            }
+                        }
+                    }
+                    $scope.itemActive=item;
+                    common.showModal("orderDetailsModal");
+                };
+                /*订单进度弹框*/
+                $scope.orderProcess=function(item){
+                    $scope.item=item;
+                    if(item.orderType!=3){
+                        httpService.postApi(httpApi.orderWipProcess,{
+                            produceOrderNum:item.produceOrderNum,
+                            orderStatus:item.orderStatus
+                        },function(data){
+                            data.list.pop();
+                            $scope.itemActive=data.list;
+                            common.showModal("orderProcessModal");
+                            var ind=1;//完成第几步
+                            angular.forEach(data.list,function(dat,index){
+                                if(dat.beginTime!=null&&dat.beginTime!=''){
+                                    ind=index+1;
+                                    if(dat.technicsProcessId=="38"){
+                                        ind=data.list.length;
+                                        return;
+                                    }
+                                }
+                            });
+                            if(data.list.length>0){
+                                var hasParam=(ind/data.list.length*100).toFixed(0);//完成百分比
+                            }else{
+                                var hasParam=0;
+                            }
+                            /*圆形进度条*/
+                            var myChart = echarts.init(document.getElementById('main'));
+                            var dataStyle = {
+                                normal: {
+                                    color: '#ddd',
+                                    label: {show:false},
+                                    labelLine: {show:false}
+                                }
+                            };
+                            var placeHolderStyle = {
+                                normal : {
+                                    color: '#6AB6FF',
+                                    label: {show:false},
+                                    labelLine: {show:false}
+                                }
+                            };
+                            var option = {
+                                title: {
+                                    text: hasParam+'%',
+                                    x: 'center',
+                                    y: 'center',
+                                    itemGap: 20,
+                                    textStyle : {
+                                        color : '#6AB6FF',
+                                        fontFamily : '微软雅黑',
+                                        fontSize : 35,
+                                        fontWeight : 'bolder'
+                                    }
+                                },
+                                series : [
+                                    {
+                                        name: '1',
+                                        type: 'pie',
+                                        clockWise: false,
+                                        radius: [60, 75],
+                                        itemStyle: dataStyle,
+                                        data: [
+                                            {
+                                                value: 100-hasParam,
+                                                name: 'process'
+                                            },
+                                            {
+                                                value: hasParam,
+                                                name: 'invisible',
+                                                itemStyle: placeHolderStyle
+                                            }
+                                        ]
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                        });
+                    }
+                };
+                /*钢网进度弹框*/
+                $scope.selectSteelOrderWipProcess=function (item) {
+                    $scope.item=item;
+                    $scope.itemActive=null;
+                    /*钢网*/
+                    httpService.postApi(httpApi.selectSteelOrderWipProcess,{
+                        uuid:item.produceOrderNum,
+                        orderStatus:item.orderStatus
+                    },function(data){
+                        $scope.itemActive=data.steelList;
+                        common.showModal("orderSteelProcessModal");
+                    });
+                };
+                /*smt进度弹框*/
+                $scope.smtOrderWipProcess=function (item) {
+                    common.showModal("smtProcessModal");
+                    $scope.smtList=[
+                        {technicsName:'Data Preparation',createTime:null,},
+                        {technicsName:'Data Finished',createTime:null,},
+                        {technicsName:'Solder Paste Printing',createTime:null,},
+                        {technicsName:'Machine Placement',createTime:null,},
+                        {technicsName:'Reflow Soldering',createTime:null,},
+                        {technicsName:'Assembly Finished',createTime:null,},
+                        {technicsName:'Final Inspection',createTime:null,},
+                        // {technicsName:'Packaging,Delivery',createTime:null,},
+                    ];
+                    /*smt*/
+                    httpService.getApi(httpApi.smtWipProcess+'?uuid='+item.detail.smtDetail.smtOrderAccessId,function(data){
+                        $scope.smtListIndex=0;//完成第几步
+                        angular.forEach(data,function(dat,ind){
+                            angular.forEach($scope.smtList,function(datChild,index){
+                                if(datChild.technicsName==dat.technicsName){
+                                    datChild.createTime=dat.endTime;
+                                    if(dat.endTime&&index+1>$scope.smtListIndex){
+                                        $scope.smtListIndex=index+1;//完成第几步
+                                    }
+                                }
+                            });
+                        });
+                        if($scope.smtListIndex>0){
+                            var hasParam=($scope.smtListIndex/$scope.smtList.length*100).toFixed(0);//完成百分比
+                        }else{
+                            var hasParam=0;
+                        }
+                        /*圆形进度条*/
+                        var myChart = echarts.init(document.getElementById('mainSmt'));
+                        var dataStyle = {
+                            normal: {
+                                color: '#ddd',
+                                label: {show:false},
+                                labelLine: {show:false}
+                            }
+                        };
+                        var placeHolderStyle = {
+                            normal : {
+                                color: '#6AB6FF',
+                                label: {show:false},
+                                labelLine: {show:false}
+                            }
+                        };
+                        var option = {
+                            title: {
+                                text: hasParam+'%',
+                                left: 'center',
+                                top: 'center',
+                                itemGap: 20,
+                                textStyle : {
+                                    color : '#6AB6FF',
+                                    fontFamily : '微软雅黑',
+                                    fontSize : 35,
+                                    fontWeight : 'bolder'
+                                }
+                            },
+                            series : [
+                                {
+                                    name: '1',
+                                    type: 'pie',
+                                    clockWise: false,
+                                    radius: [60, 75],
+                                    itemStyle: dataStyle,
+                                    data: [
+                                        {
+                                            value: 100-hasParam,
+                                            name: 'process'
+                                        },
+                                        {
+                                            value: hasParam,
+                                            name: 'invisible',
+                                            itemStyle: placeHolderStyle
+                                        }
+                                    ]
+                                }
+                            ]
+                        };
+                        myChart.setOption(option);
+                    });
+                };
+                /*补款订单支付，form表单提交*/
+                $scope.fillMoney=function(item){
+                    window.location.href = "#/supplement?orderSupplementNum=" + item.orderSupplementNum;//新
+                };
+                /*detail弹框提示*/
+                $scope.alertNote=function(item){
+                    common.alertModal(item.problemRemark);
+                }
+            },
+            link:function(scope){}
+        }
+    });
+    /*订单详情弹框*/
+    directiveModule.directive('orderDetails', function() {
+        return {
+            restrict : 'A',
+            scope : {
+                list : '=',
+                achieveDate:"="
+            },
+            replace : false,
+            templateUrl: '/client/template/component/orderDetails.7f4392cf.html'
+         /*   link:function(scope,element){}*/
+        }
+    });
+    /*PCB订单生产进度弹框*/
+    directiveModule.directive('orderProce', function() {
+        return {
+            restrict : 'A',
+            scope : {
+                list : '=',
+                item : '=',
+            },
+            replace : false,
+            templateUrl: '/client/template/component/orderProce.9e7e4234.html',
+            controller: function ($scope, httpService, httpApi, $rootScope) {
+                $scope.videoModal = false;
+                $scope.showClose=false;
+                $scope.videoUrl = null;
+                $scope.showVideoModal = function (index) {
+                    switch (index + 1) {
+                        case 1:
+                            $scope.videoUrl = "/video/2.Drilling.mp4";
+                            break;
+                        case 2:
+                            $scope.videoUrl = "/video/2.Drilling.mp4";
+                            break;
+                        case 3:
+                            $scope.videoUrl = "/video/3.CopperDeposition.mp4";
+                            break;
+                        case 4:
+                            $scope.videoUrl = "/video/4. Imagetheouterlayers.mp4";
+                            break;
+                        case 5:
+                            $scope.videoUrl = "/video/5.PatternPlating.mp4";
+                            break;
+                        case 6:
+                            $scope.videoUrl = "/video/6.AutomaticOpticalInspection(AOI).mp4";
+                            break;
+                        case 7:
+                            $scope.videoUrl = "/video/7.SolderMask.mp4";
+                            break;
+                        case 8:
+                            $scope.videoUrl = "/video/8.Silkscreen.mp4";
+                            break;
+                        case 9:
+                            $scope.videoUrl = "/video/9.HotAirSolderLeveling.mp4";
+                            break;
+                        case 10:
+                            $scope.videoUrl = "/video/10.ElectricalTest.mp4";
+                            break;
+                        case 11:
+                            $scope.videoUrl = "/video/11.Profiling,V-cutscoring.mp4";
+                            break;
+                        case 12:
+                            $scope.videoUrl = "/video/12.Finalinspection-QC.mp4";
+                            break;
+                        case 13:
+                            $scope.videoUrl = "/video/13.Packaging,Delivery.mp4";
+                            break;
+                    }
+                    $scope.videoModal = true;
+                }
+                $scope.hideModal = function () {
+                    $scope.videoModal = false;
+                }
+                $("#orderProcessModal").on("hidden.bs.modal",function(){
+                    $scope.videoModal = false;
+                });
+            },
+            link: function (scope, element) {
+            }
+        }
+    });
+    /*钢网订单生产进度弹框*/
+    directiveModule.directive('orderSteelProce', function() {
+        return {
+            restrict : 'A',
+            scope : {
+                list : '=',
+                item : '=',
+            },
+            replace : false,
+            templateUrl: '/client/template/component/orderSteelProce.bb873761.html',
+            controller:function($scope,httpService,httpApi){
+                $scope.form={
+                    showProcess:0,
+                }
+                $scope.$watch("list", function (newVal, oldVal) {
+                    /*重新获取快递费用*/
+                    if($scope.list&&$scope.list.length>0) {
+                        $scope.itemSteelShow=$scope.list[0];$scope.form.showProcess=0;
+                    }else{
+                        $scope.itemSteelShow=null;
+                    }
+                });
+                $scope.$watch("form.showProcess", function (newVal, oldVal) {
+                    /*重新获取快递费用*/
+                    if($scope.list&&$scope.list.length>0)  $scope.itemSteelShow=$scope.list[$scope.form.showProcess];
+                });
+            },
+        }
+    });
+    /*smt订单生产进度弹框*/
+    directiveModule.directive('smtProce', function() {
+        return {
+            restrict : 'A',
+            replace : false,
+            templateUrl: '/client/template/placeOrder/component/smtProce.7db36ada.html',
+            controller:function($scope,httpService,httpApi){
+
+            },
+        }
+    });
+    /*订单物流进度弹框*/
+    directiveModule.directive('orderTracking', function() {
+        return {
+            restrict : 'A',
+            scope : {
+                list : '='
+            },
+            replace : false,
+            templateUrl: '/client/template/component/orderTracking.15188538.html'
+            /*   link:function(scope,element){}*/
+        }
+    });
+    /*订单状态*/
+    directiveModule.directive('orderStatus', function() {
+        return {
+            restrict : 'EA',
+            scope : {
+                orderInfo : '=',
+            },
+            replace : true,
+            templateUrl: '/client/template/component/orderStatus.3ede5bc0.html',
+            link:function(scope,element){}
+        }
+    });
+    /*钢网尺寸弹框*/
+    directiveModule.directive('steelModal', function() {
+        return {
+            restrict : 'A',
+            replace : true,
+            templateUrl: '/client/template/component/steelModal.aa7165c9.html'
+        }
+    });
+    /*customerInfo支付方式--地址列表*/
+    directiveModule.directive('customerInfo', function() {
+        return {
+            restrict : 'EA',
+            replace : true,
+            scope : {
+                list:"=",//地址列表
+                formModel:"=",//form
+                model:"=",//input
+                deleteAddr:"&",//地址删除
+                address:"&",//地址列表
+            },
+            transclude : true,
+            templateUrl : '/client/template/component/customerInfo.c85ae3b5.html',
+            controller:function($scope,httpService,httpApi){
+                /*编辑*/
+                $scope.edit=function(item){
+                    common.showModal('addressModal');
+                    if (item.type == 'shipping') {
+                        $scope.formModel.addressType = 'Edit shipping address';
+                    } else {
+                        $scope.formModel.addressType = 'Edit billing address';
+                    }
+                    $scope.formModel.uuid=item.uuid;
+                    $scope.formModel.firstName=item.firstName;
+                    $scope.formModel.lastName=item.lastName;
+                    $scope.formModel.companyName=item.companyName;
+                    $scope.formModel.street=item.street;
+                    $scope.formModel.street2=item.street2;
+                    $scope.formModel.city=item.city;
+                    $scope.formModel.country=item.country;
+                    $scope.formModel.countryName=item.countryName;
+                    $scope.formModel.state=item.state;
+                    $scope.formModel.postcode=item.postcode;
+                    $scope.formModel.phone=item.phone;
+                    $scope.formModel.type=item.type;
+                    $scope.formModel.borderRed = false;//是否显示红色边框
+                    $scope.formModel.borderRed1 = false;//是否显示红色框
+                    $scope.formModel.continue=false;//点击continue
+                    $scope.formModel.taxVat = item.taxVat==123456?'':item.taxVat;
+                };
+                /*设置默认地址*/
+                $scope.setDefault=function(item){
+                    /*设置默认地址接口*/
+                    httpService.postApi(httpApi.setDefaultAddress,{
+                        addressUUID: item.uuid,
+                    },function(data){
+                        //console.log(data);
+                        $scope.address();//地址列表
+                    });
+                }
+            }
+        }
+    });
+    /*绑定支付事件*/
+    directiveModule.directive('payClick', function() {
+        return {
+            restrict : 'A',
+            priority:1,
+            scope:{
+                pay:"&"
+            },
+            link:function(scope,elem,attr){
+                elem.on("click",function(){
+                    scope.pay();
+                })
+            }
+        }
+    });
+    /*修改地址保存事件*/
+    directiveModule.directive('addressClick', function() {
+        return {
+            restrict : 'A',
+            priority:1,
+            scope:{
+              saveAddr:"&"
+            },
+            link:function(scope,elem,attr){
+                elem.on("click",function(){
+                    scope.saveAddr();
+                })
+            }
+        }
+    });
+    /*配送方式*/
+    directiveModule.directive('shippingMethod', function() {
+        return {
+            restrict : 'EA',
+            replace : true,
+            templateUrl:'/client/template/component/shippingMethod.0fab3aed.html',
+            link:function(scope,element){
+            }
+        }
+    });
+
+    /*smt下单-上传文件*/
+    directiveModule.directive('smtUpload', function() {
+        return {
+            restrict : 'EA',
+            replace : true,
+            transclude : true,
+            templateUrl:'/client/template/placeOrder/component/smtUpload.8b01c4af.html',
+            controller:function($scope,httpService,httpApi,Upload){
+                //上传文件
+                $scope.upload = function (file, fileType) {
+                    if (file) {
+                        //判断文件类型
+                        if (file.name.toLocaleLowerCase().indexOf(".xls") == -1 && file.name.toLocaleLowerCase().indexOf(".xlsx") == -1 && file.name.toLocaleLowerCase().indexOf(".csv") == -1) {
+                            common.alertModal("Incorrect format. Please upload file in XLS,XLSX,CSV format and use English filenames.");
+                        }else if (checkQuote(file.name)) {
+                            common.alertModal("Incorrect format. Please upload file in XLS,XLSX,CSV format and use English filenames.");
+                        }else if (file.size > 10485760) {
+                            common.alertModal("File size limit 10MB.");
+                        }else{
+                            if(fileType=='bom')
+                                $scope.form.uploadLoading=true;
+                            else
+                                $scope.form.uploadLoading1=true;
+                            /*上传*/
+                            Upload.upload({
+                                url: httpApi.rootUrl + httpApi.uploadBomOrCplFile,
+                                data: {gerberFile: file, fileType: fileType}
+                            }).then(function (res) {
+                                $scope.form.uploadLoading=false;
+                                $scope.form.uploadLoading1=false;
+                             //   console.log(res)
+                                if (res.data.code == 200) {
+                                    var data = res.data.data
+                                    if(fileType == "bom"){
+                                        $scope.form.bomFileNo = data.uuid;
+                                        $scope.form.bomFileName = file.name;
+                                    }else if(fileType == 'coordinate'){
+                                        $scope.form.coordinateFileNo = data.uuid;
+                                        $scope.form.coordinateFileName = file.name;
+                                    }
+                                    $scope.form.isChange = true;
+                                    if($scope.form.bomFileNo && $scope.form.coordinateFileNo){
+                                        $scope.form.nextBtnClass = true;
+                                    }
+                                }else{
+                                    common.alertModal(res.data.message);
+                                }
+                            },function (res) {
+                                $scope.form.uploadLoading=false;
+                                $scope.form.uploadLoading1=false;
+                                /* error*/
+                                common.alertModal("Upload fail");
+                            })
+                        }
+                    }
+                }
+                /*检查文件名*/
+                function checkQuote(str) {
+                    var items = new Array("~", "`", "!", "@", "#", "$", "%", "^", "&", "{", "}", "[", "]", "(", ")", ":", ";", "'", "|", "\\", "<", ">", "？", "?", "/", "<", ">", "|");
+                    str = str.toLowerCase();
+                    for (var i = 0; i < items.length; i++) {
+                        if (str.indexOf(items[i]) >= 0) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+    })
+
+    /*smt下单-匹配元器件*/
+    directiveModule.directive('smtPartsList', function() {
+        return {
+            restrict : 'EA',
+            replace : true,
+            transclude : true,
+            templateUrl:'/client/template/placeOrder/component/smtPartsList.4afe87f3.html',
+            controller:function($scope,httpService,httpApi){
+                //当前选中的是匹配成功或者匹配失败的列表
+                var list=[];
+                var list1=[];
+                //当前选中index
+                var activeItemIndex=null;
+                //当前选中的是匹配成功或者匹配失败的列表,true:匹配成功的，false：匹配失败的
+                var matchStatus=null;
+
+                //点击列表“放大镜”按钮
+                $scope.showTable = function (index,matchStat) {
+                    /*匹配成功或者匹配失败的列表*/
+                    if(matchStat){
+                        list = $scope.partsList;
+                        list1 = $scope.matchList;
+                    }else{
+                        list = $scope.partsFailList;
+                        list1 = $scope.noMatchList;
+                    }
+                    /*隐藏其他搜索框*/
+                    angular.forEach($scope.partsList,function(item){
+                        item.isShowTable = false;
+                    });
+                    angular.forEach($scope.partsFailList,function(item){
+                        item.isShowTable = false;
+                    });
+                    /*显示*/
+                    list[index].isShowTable = true;
+
+                    /*smt搜索列表*/
+                    $scope.smtComponentList = [];
+                    $scope.formPage={
+                        searchTxt: "",
+                        baseType:null,
+                        currentPage:1,//请求页数
+                        pageRows:5,//每页条数
+                        totalPages: 0,//总页数
+                        count: 0,//总条数
+                    };
+                    $scope.pages={//分页
+                        text:'',
+                        page:1,//第几页
+                        showCurrentPage:1//页面初始化显示当前页
+                    };
+
+                    $scope.formPage.searchTxt = list[index].comment;//搜索的内容
+                    activeItemIndex = index;//选中的index
+                    matchStatus=matchStat;
+
+                    /*搜索元器件*/
+                    $scope.clickSearch();
+                };
+                //分页
+                $scope.page=function(number){
+                    if(number+1<$scope.formPage.totalPages){
+                        $scope.pages.showCurrentPage=number;//初始化显示当前页
+                    }
+                    $scope.pages.page=number;//当前页
+                    $scope.formPage.currentPage=number;//测试
+
+                    selectSmtComponentList()
+                };
+                //点击搜索
+                $scope.clickSearch = function () {
+                    $scope.smtComponentList = [];
+                    $scope.formPage.currentPage=1;
+                    selectSmtComponentList();
+                };
+                /*监控回车键搜索*/
+                $scope.enterSearch=function(event){
+                    if(event.keyCode==13){
+                        $scope.smtComponentList = [];
+                        $scope.formPage.currentPage=1;
+                        selectSmtComponentList();
+                    }
+                };
+                //搜索元器件
+                function selectSmtComponentList(){
+                    $scope.selectSmtComponentListLoading=true;
+
+                    httpService.postApi(httpApi.selectSmtComponentList,{
+                            currentPage:$scope.formPage.currentPage,
+                            pageSize:$scope.formPage.pageRows,
+                            keyword:$scope.formPage.searchTxt,
+                            componentLibraryType:$scope.formPage.baseType?$scope.formPage.baseType:null,
+                        } , function (data) {
+                        if(data.code == 200){
+                            angular.forEach(data.data.list,function(item){
+                                item.showAll=false;
+                            });
+                            $scope.smtComponentList = data.data.list;
+                            $scope.formPage.totalPages = Math.ceil(data.data.total / $scope.formPage.pageRows)
+                            $scope.formPage.count = data.data.total
+                        }else{
+                            common.alertModal(data.message)
+                        }
+                        $scope.selectSmtComponentListLoading=false;
+                    })
+                }
+                $scope.$watch('formPage.baseType',function(newVal,oldVal){
+                    if(newVal!=oldVal){
+                        $scope.formPage.currentPage=1;
+                        selectSmtComponentList();
+                    }
+                });
+                //点击替换元器件
+                $scope.replacePart = function(item){
+                    if(item.stockCount >=list[activeItemIndex].quantity&&item.stockCount > 0){
+                        /*替换元器件信息*/
+                        /*显示的列表*/
+                        /*元器件价格*/
+                        var componentPrices=null;
+                        if(item.componentPrices&&list[activeItemIndex].quantity){
+                            angular.forEach(item.componentPrices,function(item,index){
+                                if(item.startNumber>list[activeItemIndex].quantity&&index==0){
+                                    componentPrices=item.productPrice;
+                                }
+                                /*数量区间*/
+                                if(item.startNumber<=list[activeItemIndex].quantity&&(item.endNumber>=list[activeItemIndex].quantity||item.endNumber==-1)){
+                                    componentPrices=item.productPrice;
+                                }
+                            })
+                        }
+                        /*被替换的元器件是扩展库，并且选中，已选中扩展库数量减1*/
+                        if( list[activeItemIndex].componentLibraryType!='base'&&list[activeItemIndex].isChecked){
+                            /*判断选中相同的个数*/
+                            var hasSave=0;
+                            angular.forEach($scope.partsList,function(itemChild){
+                                if(itemChild.componentCode==list[activeItemIndex].componentCode&&itemChild.isChecked){
+                                    hasSave++;
+                                }
+                            });
+                            /*1，只有自己被选中，0，自己被取消选中*/
+                            if(hasSave==1){
+                                $scope.form.checkedNum --;
+                            }
+                        }
+                        list[activeItemIndex].componentCode = item.componentCode;//编号
+                        list[activeItemIndex].componentTypeEn = item.componentTypeEn;//类型
+                        list[activeItemIndex].describe = item.describe;//描述
+                        list[activeItemIndex].componentLibraryType = item.componentLibraryType;//库类型
+                        list[activeItemIndex].componentPrices = componentPrices;//价格区间
+                        list[activeItemIndex].isChecked = false;
+                        /*判断元器件是否能默认选中扩展库*/
+                        if(item.componentLibraryType != 'base'){
+                            /*判断选中相同的个数*/
+                            var hasSave=0;
+                            angular.forEach($scope.partsList,function(itemChild){
+                                if(itemChild.componentCode==item.componentCode&&itemChild.isChecked){
+                                    hasSave++;
+                                }
+                            });
+                            /*已经有被选中的相同的元器件，直接选中*/
+                            if(hasSave>0){
+                                list[activeItemIndex].isChecked = true;
+                            }else{
+                                if($scope.form.checkedNum >= $scope.extendNumber){
+                                    list[activeItemIndex].isChecked = false;
+                                }else{
+                                    /*还没选中的相同的扩展库元器件，选中，数量+1*/
+                                    list[activeItemIndex].isChecked = true;
+                                    $scope.form.checkedNum ++;
+                                }
+                            }
+                        }else{
+                            list[activeItemIndex].isChecked = true;
+                        }
+                        list[activeItemIndex].isShowTable = false;
+                        list[activeItemIndex].matchType = 'add';
+                        list[activeItemIndex].stock = item.stockCount;
+                        /*修改的列表*/
+                        if(matchStatus){
+                            list1[activeItemIndex][list1[activeItemIndex].length-3]= item.componentCode;//编号
+                        }else{
+                            list1[activeItemIndex]=list1[activeItemIndex].concat([ item.componentCode,"",""])
+                        }
+                        /*替换的类别，是匹配成功或者匹配失败的*/
+                        if(!matchStatus){
+                            /*匹配失败,把当前替换的内容移到匹配成功列表,匹配失败的列表移除当前内容*/
+                            $scope.partsList.push($scope.partsFailList[activeItemIndex]);
+                            $scope.partsFailList.splice(activeItemIndex,1);
+                            $scope.matchList.push($scope.noMatchList[activeItemIndex]);
+                            $scope.noMatchList.splice(activeItemIndex,1);
+                        }
+
+                        $scope.form.isChange = true;
+                        /*判断是否有相同已选中的元器件*/
+                        $scope.sameSelected();
+                    }else{
+                        common.alertModal("Inventory shortage.");
+                    }
+                };
+                //获取元器件类型
+                //selectComponentTypeInfo();
+                function selectComponentTypeInfo(){
+                    httpService.getApi(httpApi.selectComponentTypeInfo, function (data) {
+                        //console.log(data)
+                        if(data.code == 200){
+                            $scope.componentTypeList = data.data;
+                        }else{
+                            common.alertModal(data.message)
+                        }
+                    })
+                }
+                //获取元器件封装
+                //selectSpecificationList();
+                function selectSpecificationList(){
+                    httpService.getApi(httpApi.selectSpecificationList, function (data) {
+                        if(data.code == 200){
+                            $scope.specificationList = data.data;
+                        } else{
+                            common.alertModal(data.message)
+                        }
+                    })
+                }
+
+                /*确认元器件*/
+                $scope.checkConfirm=function(item){
+                    item.isChecked=!item.isChecked;
+                    $scope.form.isChange = true;
+                    //是否是扩展库元件
+                    if(item.componentLibraryType!="base"){
+                        /*判断选中相同的个数*/
+                        var hasSave=0;
+                        angular.forEach($scope.partsList,function(itemChild){
+                            if(itemChild.componentCode==item.componentCode&&itemChild.isChecked){
+                                hasSave++;
+                            }
+                        });
+                        /*1，只有自己被选中，0，自己被取消选中*/
+                        if(hasSave<=1){
+                            if(item.isChecked){
+                                $scope.form.checkedNum ++;
+                            }else if(hasSave<1){
+                                $scope.form.checkedNum --;
+                            }
+                        }
+                    }
+                    /*判断是否有相同已选中的元器件*/
+                    $scope.sameSelected();
+                };
+                /*删除元器件*/
+                var activeItemIndex=null;//下标
+                var match=false;//是否是匹配成功的列表
+                $scope.delModal=function(index,bool){
+                    activeItemIndex=index;
+                    match=bool;
+                    common.showModal("confirmModal");
+                };
+                /*删除元器件*/
+                $scope.deleteComponent=function(){
+                    $scope.form.isChange = true;
+                    if(match){
+                        /*删除匹配成功的元器件*/
+                        $scope.partsList[activeItemIndex].show=false;
+                        //是否是扩展库元件
+                        if($scope.partsList[activeItemIndex].componentLibraryType!="base"&&$scope.partsList[activeItemIndex].isChecked){
+                            /*判断选中相同的个数*/
+                            var hasSave=0;
+                            angular.forEach($scope.partsList,function(itemChild){
+                                if(itemChild.componentCode==$scope.partsList[activeItemIndex].componentCode&&itemChild.isChecked){
+                                    hasSave++;
+                                }
+                            });
+                            /*1，只有自己被选中，0，自己被取消选中*/
+                            if(hasSave==1){
+                                $scope.form.checkedNum --;
+                            }
+                        }
+                        /*匹配失败,把当前替换的内容移到匹配失败列表,匹配成功的列表移除当前内容*/
+                        $scope.partsFailList.push($scope.partsList[activeItemIndex]);
+                        $scope.partsList.splice(activeItemIndex,1);
+                        $scope.noMatchList.push($scope.matchList[activeItemIndex]);
+                        $scope.matchList.splice(activeItemIndex,1);
+
+                    }else{
+                        /*删除匹配不成功的元器件*/
+                        $scope.partsFailList[activeItemIndex].show=false;
+                    }
+                    /*判断是否有相同已选中的元器件*/
+                    $scope.sameSelected();
+                };
+
+                /*判断是否有相同已选中的元器件*/
+                $scope.sameSelected=function(){
+                    angular.forEach($scope.partsList,function(item){
+                        item.hasSameSelected=false;
+                        angular.forEach($scope.partsList,function(itemChild){
+                            if(itemChild.componentCode==item.componentCode&&itemChild.isChecked){
+                                item.hasSameSelected=true;
+                            }
+                        });
+                    });
+                }
+            }
+        }
+    });
+    /*smt下单-加入购物车*/
+    directiveModule.directive('smtOrders', function() {
+        return {
+            restrict: 'EA',
+            replace: true,
+            transclude: true,
+            templateUrl: '/client/template/placeOrder/component/smtOrders.06644905.html',
+            controller: function ($scope,myServer, httpService, httpApi) {
+
+            }
+        }
+    });
+    /*smt订单详情*/
+    directiveModule.directive('smtDetails', function() {
+        return {
+            restrict : 'A',
+            replace : false,
+            templateUrl: '/client/template/placeOrder/component/smtDetails.355e7086.html',
+            controller: function ($scope, httpService, httpApi) {
+                $scope.smtDetailsTab = 0
+            }
+        }
+    })
+    /*smt元器件详情*/
+    directiveModule.directive('componentDetails', function() {
+        return {
+            restrict : 'A',
+            replace : false,
+            templateUrl: '/client/template/placeOrder/component/componentDetails.d57efdb1.html',
+            controller: function ($scope, httpService, httpApi) {
+                /*元器件详情显示所有价格*/
+                $scope.show={
+                    showAll:false
+                };
+            }
+        }
+    })
+    /*smt元器件搜索页面头部*/
+    directiveModule.directive('searchHead', function() {
+        return {
+            restrict : 'A',
+            replace : false,
+            templateUrl: '/client/template/smtComponent/component/searchHead.49b6f03d.html',
+            controller: function ($scope, httpService, httpApi) {
+                /*用户信息接口*/
+                httpService.getApi(httpApi.userInfo,function (data) {
+                    //判断未登录进入页面时头部显示控制
+                    if(data){
+                        $scope.userInfo=data;//全局变量
+                        $scope.hasLogin=true;
+                    }else{
+                        $scope.hasLogin=false;
+                        $scope.userInfo={};
+                        $scope.userInfo.cartNum=0;
+                    }
+                })
+            }
+        }
+    })
+});
