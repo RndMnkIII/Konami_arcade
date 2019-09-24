@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stitchProject version="2.0" cameraMotion="automatic" computedCameraMotion="homography" projection="perspective">
+  <vignetteCorrection redFactor="0.387096763" greenFactor="0.387096763" blueFactor="0.387096763" globalIntensityScale="1" />
+  <sourceImages>
+    <sourceImage filePath="C:\Users\javier\Documents\curso-udemy-vuejs\Konami_arcade\Aliens\Documentation\photos\stich\IMG_20190904_165306.jpg">
+      <cameraPose matrix="0.99608695668631142,-0.028303245151445444,-0.0037206215421488752,0.017066758275241317,1.0091796214346229,-0.022790222876358505,-0.0091793585168376667,-0.66465626983023363,1" tolerance="4" />
+    </sourceImage>
+    <sourceImage filePath="C:\Users\javier\Documents\curso-udemy-vuejs\Konami_arcade\Aliens\Documentation\photos\stich\IMG_20190904_165319.jpg">
+      <cameraPose matrix="1,0,0,0,1,0,0,0,1" tolerance="4" />
+    </sourceImage>
+    <sourceImage filePath="C:\Users\javier\Documents\curso-udemy-vuejs\Konami_arcade\Aliens\Documentation\photos\stich\IMG_20190904_165332.jpg">
+      <cameraPose matrix="1.004059839303967,-0.0082347206312217286,-0.013793832557930643,0.0092477421351631756,1.0061912107772835,-0.0095929115115211128,-0.00726896209585796,0.71796830476169726,1" tolerance="4" />
+    </sourceImage>
+  </sourceImages>
+</stitchProject>
