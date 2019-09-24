@@ -19,3 +19,6 @@ I have also included photographs of the IC's to facilitate the identification of
 I have developed a pcb to be able to debug the signals of the konami-2 cpu (052526) using the FPGA DE10-Nano, it is simply an appropriate interface to route the signals from the cpu pins to the GPIO1 connector of the FPGA by a bidirectional conversion of TTL 5v and CMOS 3.3v levels.
 
 All the schematics of the Kicad version 5.1 board are available in the repository for download, as well as the step files with the 3d models that are not in the standard Kicad library that I have used for the footprints of the components.
+
+Schematic:
+![](Aliens/custom_pcbs/Konami-2_DE10Nano_adapter/esquemas/SCHEMATIC.pdf?raw=true "Konami-2 nano adapter schematic")
