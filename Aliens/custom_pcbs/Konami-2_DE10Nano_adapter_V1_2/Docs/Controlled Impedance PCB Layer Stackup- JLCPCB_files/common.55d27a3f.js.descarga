@@ -1,0 +1,211 @@
+/**
+ * Created by win7 on 2017/10/12.
+ */
+/**
+ * 公共函数
+ */
+/*图片加载错误*/
+function nofind(obj,hideParent){
+    if(obj["name"]==3){
+        /*钢网*/
+        obj.src = '/client/image/cart_steel.58c85990.png';
+    }else{
+        /*pcb*/
+        obj.src = '/client/image/noImg.9f6758f0.png';
+    }
+    obj.onerror = null;
+    if(obj.parentNode){
+        obj.parentNode.setAttribute("href","javascript:void(0);");
+    }
+    if(hideParent){
+        obj.parentNode.style.display='none';
+    }
+}
+//读取cookies
+function getCookie(name) {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
+}
+//设置cookies
+function setCookie(name,value,time) {
+    var strsec = getsec(time);
+    var exp = new Date();
+    exp.setTime(exp.getTime() + strsec*1);
+    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString()+"; path=/";
+}
+function getsec(str) {
+    var str1=str.substring(1,str.length)*1;
+    var str2=str.substring(0,1);
+    if (str2=="s") {
+        return str1*1000;
+    } else if (str2=="h") {
+        return str1*60*60*1000;
+    } else if (str2=="d") {
+        return str1*24*60*60*1000;
+    }
+}
+
+/*浮点型计算*/
+//加
+function add(a, b) {
+    var c, d, e;
+    try {
+        c = a.toString().split(".")[1].length;
+    } catch (f) {
+        c = 0;
+    }
+    try {
+        d = b.toString().split(".")[1].length;
+    } catch (f) {
+        d = 0;
+    }
+    return e = Math.pow(10, Math.max(c, d)), (mul(a, e) + mul(b, e)) / e;
+}
+//减
+function sub(a, b) {
+    var c, d, e;
+    try {
+        c = a.toString().split(".")[1].length;
+    } catch (f) {
+        c = 0;
+    }
+    try {
+        d = b.toString().split(".")[1].length;
+    } catch (f) {
+        d = 0;
+    }
+    return e = Math.pow(10, Math.max(c, d)), (mul(a, e) - mul(b, e)) / e;
+}
+//乘
+function mul(a, b) {
+    var c = 0,
+        d = a.toString(),
+        e = b.toString();
+    try {
+        c += d.split(".")[1].length;
+    } catch (f) {}
+    try {
+        c += e.split(".")[1].length;
+    } catch (f) {}
+    return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+}
+//除
+function div(a, b) {
+    var c, d, e = 0,
+        f = 0;
+    try {
+        e = a.toString().split(".")[1].length;
+    } catch (g) {}
+    try {
+        f = b.toString().split(".")[1].length;
+    } catch (g) {}
+    return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), mul(c / d, Math.pow(10, f - e));
+}
+
+
+
+define(["jquery","bootstrap"],function ($) {
+    /**
+     * 公用弹出窗口
+     * @param url
+     * @param title
+     * @param width
+     * @param minHeight
+     * @param resize 是否允许最大化
+     * @param aotuscrollObj
+     */
+    /*提示框*/
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $(function(){
+        $(".modal").on("hidden.bs.modal",function(){
+            $("body").removeAttr("style");
+        });
+    });
+    /*显示弹框*/
+    var showModal=function showModal(id){
+        $("#"+id).modal("show").on("shown.bs.modal",function(){});
+    };
+    /*隐藏弹框*/
+    var hideModal=function hideModal(id){
+        $(id).modal("hide").on("shown.bs.modal",function(){});
+    };
+    /*确定弹框*/
+    var alertModal=function alertModal(msg){
+        $("#msg").html(msg);
+        $("#alert").modal("show").on("shown.bs.modal",function(){});
+    };
+    /*提示弹框*/
+    var noticeModal=function noticeModal(msg){
+        $("#notice").html(msg);
+        $("#noticeModal").modal("show").on("shown.bs.modal",function(){});
+    };
+    /*加载弹框*/
+    var loadingModal=function loadingModal(msg){
+        if(msg){
+            $("#loading").html(msg);
+        }
+        $("#loadingModal").modal("show");
+    };
+    var closeLoadingModal=function closeLoadingModal(){
+        $("#loadingModal").modal("hide");
+    };
+    /*倒计时*/
+    var countDown= function countDown(date,hour,minute,second,callback){
+        var intervalTime=window.setInterval(function(){
+            if(parseInt(second)>0){
+                second--;
+                if(second<10){
+                    second="0"+second;
+                }
+            }else{
+                if(parseInt(minute)>0){
+                    minute--;
+                    second=59;
+                    if(minute<10){
+                        minute="0"+minute;
+                    }
+                }else{
+                    if(parseInt(hour)>0){
+                        hour--;
+                        minute=59;
+                        if(hour<10){
+                            hour="0"+hour;
+                        }
+                    }else{
+                        if(parseInt(date)>0){
+                            date--;
+                            hour=23;
+                            if(date<10){
+                                date="0"+date;
+                            }
+                        }else{
+                            window.clearInterval(intervalTime);
+                        }
+                    }
+                }
+            }
+            if(typeof callback == "function")
+                callback(date,hour,minute,second);
+        },1000);
+    };
+    return {
+        showModal:showModal,
+        hideModal:hideModal,
+        alertModal: alertModal,
+        noticeModal: noticeModal,
+        closeLoadingModal: closeLoadingModal,
+        loadingModal: loadingModal,
+        countDown: countDown,
+
+        add: add,
+        sub: sub,
+        mul: mul,
+        div: div,
+
+    };
+
+});

@@ -1,0 +1,8 @@
+(fp_lib_table
+  (lib (name Konami-2_PGA)(type KiCad)(uri ${KIPRJMOD}/Konami-2_PGA.pretty)(options "")(descr ""))
+  (lib (name SN74LVC8T245DWR)(type KiCad)(uri ${KIPRJMOD}/SN74LVC8T245DWR/SN74LVC8T245DWR.pretty)(options "")(descr ""))
+  (lib (name Condensadores)(type KiCad)(uri ${KIPRJMOD}/Condensadores.pretty)(options "")(descr ""))
+  (lib (name Resistencias)(type KiCad)(uri ${KIPRJMOD}/Resistencias.pretty)(options "")(descr ""))
+  (lib (name SN74LVC8T245PWR)(type KiCad)(uri ${KIPRJMOD}/SN74LVC8T245PWR.pretty)(options "")(descr ""))
+  (lib (name Logos)(type KiCad)(uri ${KIPRJMOD}/Logos.pretty)(options "")(descr ""))
+)

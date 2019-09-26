@@ -1,0 +1,25 @@
+/**
+ * app.js
+ */
+define(
+    [
+        'angular',
+        'angular-async-loader',
+        '/client/js/services/servicesModule.eaacdfff.js',
+        'angularRoute',
+        'upload',
+        '/client/js/directive/directiveModule.a477eb07.js',
+        '/client/js/directive/orderDirective.d256fcce.js?ver=2',
+        '/client/js/common.55d27a3f.js'
+    ], function (angular,asyncLoader) {
+        if(!window.console){
+            window.console = {};
+        }
+        if(!window.console.log){
+            window.console.log = function(msg){};
+        }
+        var app=angular.module('myApp', [ 'ngRoute',  'servicesModule','ngFileUpload','directiveModule']);
+        asyncLoader.configure(app);
+        return app;
+    }
+);
