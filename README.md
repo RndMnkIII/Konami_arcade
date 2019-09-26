@@ -21,4 +21,4 @@ I have developed a pcb to be able to debug the signals of the konami-2 cpu (0525
 All the schematics of the Kicad version 5.1 board are available in the repository for download, as well as the step files with the 3d models that are not in the standard Kicad library that I have used for the footprints of the components.
 
 Schematic:
-https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/custom_pcbs/Konami-2_DE10Nano_adapter/esquemas/SCHEMATIC.pdf
+https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/custom_pcbs/Konami-2_DE10Nano_adapter_V1_2/Konami-2_DE10Nano_adapter_V1_2.pdf
