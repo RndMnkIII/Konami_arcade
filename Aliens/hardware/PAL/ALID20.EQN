@@ -1,0 +1,35 @@
+; JED2EQN -- JEDEC file to Boolean Equations disassembler (Version V063)
+; Copyright (c) National Semiconductor Corporation 1990-1993
+; Disassembled from ALID20.JED. Date: 7-22-119
+;$GALMODE MEDIUM
+
+chip ALID20 GAL16V8
+
+i1=1 i2=2 i3=3 i4=4 i5=5 i6=6 i7=7 i8=8 i9=9 GND=10 /i11=11 o12=12 
+f13=13 f14=14 f15=15 f16=16 o17=17 o18=18 o19=19 VCC=20 
+
+@ues 0000000000000000
+@ptd unused
+
+equations
+
+/o19 = /i1 * /i3 * /i4 * /i5 * /f16 * /i6 * /i7 * /i9 * i11
+    + /i1 * /i3 * i4 * /f16
+o19.oe = vcc
+/o18 = /i2 * /i1 * f15 * f14 * i8
+o18.oe = vcc
+/o17 = /i1 * /i8
+o17.oe = vcc
+/f16 = gnd
+f16.oe = gnd
+/f15 = /i1 * /i3 * /i4 * /i5 * /f16 * /i6 * /i7 * /i9 * i11
+    + /i1 * /i3 * i4 * /f16
+f15.oe = vcc
+/f14 = i5 * i6 * i7 * /f13 * /i9
+f14.oe = vcc
+/f13 = gnd
+f13.oe = gnd
+/o12 = /i1 * /i3 * /i4 * /i5 * /f16 * /i6 * /i7 * /i9 * i11
+    + /i1 * /i3 * i4 * /f16
+    + /i2 * /i1 * f15 * f14
+o12.oe = vcc

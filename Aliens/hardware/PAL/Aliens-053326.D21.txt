@@ -1,0 +1,52 @@
+Inputs:
+
+1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18
+
+Outputs:
+
+12 (Combinatorial, No output feedback, Active low)
+13 (Combinatorial, Output feedback output, Active low)
+14 (Combinatorial, Output feedback output, Active low)
+15 (Combinatorial, Output feedback output, Active low)
+16 (Combinatorial, Output feedback output, Active low)
+17 (Combinatorial, Output feedback output, Active low)
+18 (Combinatorial, Output feedback output, Active low)
+19 (Combinatorial, No output feedback, Active low)
+
+Equations:
+
+/D20_8 = /MAF & /MAE & /MAD & /MAC & /MAB & /MAA & WOCO
+D20_8.oe = vcc
+
+/WORK = /AS & /MAF & /MAE & /MAD & /MAC & /MAB & MAA +
+       /AS & /MAF & /MAE & /MAD & /MAC & MAB +
+       /AS & /MAF & /MAE & /MAD & MAC +
+       /AS & /MAF & /MAE & /MAD & /MAC & /MAB & /MAA & /WOCO
+WORK.oe = vcc
+
+/BANK = /AS & /BK4 & /MAF & /MAE & MAD
+BANK.oe = vcc
+
+/D20_13 = /AS & /MAF & MAE & /MAD & MAC & MAB & MAA
+D20_13.oe = vcc
+
+/D20_16 = INIT & /MAF & MAE & MAD & MAC & MAB
+D20_16.oe = vcc
+
+/D20_2-D18_2 = /AS & /MAF & MAE +
+       /AS & /MAF & /MAE & /MAD & /MAC & /MAB & /MAA & WOCO
+D20_2-D18_2.oe = vcc
+
+/PROG = /AS & MAF +
+       /AS & BK4 & /MAF & /MAE & MAD
+PROG.oe = vcc
+
+/C19_1 = /AS & MAF +
+       /AS & BK4 & /MAF & /MAE & MAD +
+       /AS & /MAF & /MAE & /MAD & /MAC & /MAB & MAA +
+       /AS & /MAF & /MAE & /MAD & /MAC & MAB +
+       /AS & /MAF & /MAE & /MAD & MAC +
+       /AS & /MAF & /MAE & /MAD & /MAC & /MAB & /MAA & /WOCO +
+       /AS & /BK4 & /MAF & /MAE & MAD
+C19_1.oe = vcc
+
