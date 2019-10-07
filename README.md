@@ -22,3 +22,7 @@ All the schematics of the Kicad version 5.1 board are available in the repositor
 
 Schematic:
 https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/custom_pcbs/Konami-2_DE10Nano_adapter_V1_2/Konami-2_DE10Nano_adapter_V1_2.pdf
+
+### Added 07/10/2019: PAL IC's verilog code:
+https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/verilog/PAL16L8_053327-D20.v
+https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/verilog/PAL16L8_053326-D21.v
