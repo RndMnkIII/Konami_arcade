@@ -1,11 +1,7 @@
 //PAL16L8_053326_D21_TEST.v
-//Implementation of PAL 053327-D20 combinatorial logic
+//PAL 053327-D21 Testbench.
 //used in Aliens Konami Arcade PCB.
-//Converted to Verilog By RndMnkIII. 10/2019. (@RndMnkIII).
-//---------------------------------------------------------
-//Dumped from an unsecured PAL16L8, 
-//converted to GAL16V8 with PALTOGAL 
-//and tested by Caius (@Caius63417737).
+//Author: RndMnkIII. 10/2019. (@RndMnkIII).
 //---------------------------------------------------------
 //iverilog -o pald21_sim PAL16L8_053326_D21.v PAL16L8_053326_D21_TEST.v
 //vvp pald21_sim
