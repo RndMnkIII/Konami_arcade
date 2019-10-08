@@ -26,3 +26,6 @@ https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/custom_pcbs/Konami
 ### Added 07/10/2019: PAL IC's verilog code:
 https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/verilog/PAL16L8_053327-D20.v
 https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/verilog/PAL16L8_053326-D21.v
+
+### Added 08/10/2019: PAL IC's Test benchs and GTKWave visualizations:
+![](/Aliens/verilog/gtkwave_pal21_sim.png?raw=true "GTKWave PAL16L8 D21")
