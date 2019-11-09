@@ -1,20 +1,22 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Tue Oct 08 07:17:34 2019
+[*] Thu Oct 10 17:31:05 2019
 [*]
 [dumpfile] "C:\Users\javier\Documents\GitHub\Konami_arcade\Aliens\verilog\PAL16L8_053326_D21_TEST.vcd"
-[dumpfile_mtime] "Tue Oct 08 07:09:18 2019"
-[dumpfile_size] 47721
+[dumpfile_mtime] "Thu Oct 10 17:20:09 2019"
+[dumpfile_size] 73444
 [savefile] "C:\Users\javier\Documents\GitHub\Konami_arcade\Aliens\verilog\pal21_sim.gtkw"
 [timestart] 0
 [size] 1920 1057
-[pos] -61 -61
-*-6.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -35 -35
+*-8.000000 22 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] PAL16L8_053326_D21_TEST.
 [sst_width] 211
-[signals_width] 126
+[signals_width] 198
 [sst_expanded] 1
-[sst_vpaned_height] 315
+[sst_vpaned_height] 632
+@200
+-Inputs:
 @28
 PAL16L8_053326_D21_TEST.AS
 PAL16L8_053326_D21_TEST.BK4
@@ -26,17 +28,37 @@ PAL16L8_053326_D21_TEST.MAC
 PAL16L8_053326_D21_TEST.MAB
 PAL16L8_053326_D21_TEST.MAA
 PAL16L8_053326_D21_TEST.WOCO
+@200
+-
+-Outputs:
+@28
+[color] 2
 PAL16L8_053326_D21_TEST.C19_1
+[color] 2
 PAL16L8_053326_D21_TEST.PROG
+[color] 2
 PAL16L8_053326_D21_TEST.D18_5__D20_2
+[color] 2
 PAL16L8_053326_D21_TEST.D20_16
+[color] 2
 PAL16L8_053326_D21_TEST.D20_13
+[color] 2
 PAL16L8_053326_D21_TEST.BANK
+[color] 2
 PAL16L8_053326_D21_TEST.WORK
+[color] 2
 PAL16L8_053326_D21_TEST.D20_8
-@22
-PAL16L8_053326_D21_TEST.pald21.in[9:0]
+@200
+-
+-
+-Input vector:
 @23
+[color] 4
+PAL16L8_053326_D21_TEST.pald21.in[9:0]
+@200
+-Output vector:
+@22
+[color] 2
 PAL16L8_053326_D21_TEST.pald21.out[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

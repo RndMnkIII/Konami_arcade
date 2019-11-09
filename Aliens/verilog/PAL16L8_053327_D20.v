@@ -7,23 +7,36 @@
 //converted to GAL16V8 with PALTOGAL 
 //and tested by Caius (@Caius63417737).
 //---------------------------------------------------------
-
+`timescale 1ns / 1ns
 module PAL16L8_053327_D20(in, out);
 	input [11:0] in;
 	output [4:0] out;
-	wire o14, o15;
+	//wire o14, o15;
+	reg r14, r15;
 	
-	assign o14 = in[4] & in[5] & in[6] & ~in[8] & ~in[10];
+	always @(in[4] or in[5] or in[6] or in[8] or in[10])
+	begin
+	    #5  r14 = ~(in[4] & in[5] & in[6] & ~in[8] & ~in[10]);
+	end
 	
-	assign o15 = ~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] & ~in[11] + ~in[0] & ~in[2] & in[3] & ~in[11];
+	always @(in[0] or in[2] or in[3] or in[4] or in[5] or in[6] or in[8] or in[9] or in[11])
+	begin
+	   #5 r15 = ~((~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] & ~in[11]) | (~in[0] & ~in[2] & in[3] & ~in[11]));
+	end 
 	
-	assign out[0] = ~(~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] & ~in[11] + ~in[0] & ~in[2] & in[3] & ~in[11] + ~in[0] & ~in[1] & o14 & o15);
+	//assign o14 = ~(in[4] & in[5] & in[6] & ~in[8] & ~in[10]);
 	
-	assign out[1] = ~o14;
+	//assign o15 = ~(~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] & ~in[11] + ~in[0] & ~in[2] & in[3] & ~in[11]);
+	
+	//assign out[0] = ~(~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] + ~in[0] & ~in[2] & in[3]  + ~in[0] & ~in[1] & ~o14 & ~o15);
+	assign #5 out[0] = ~((~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9]) | (~in[0] & ~in[2] & in[3])  | (~in[0] & ~in[1] & ~r14 & ~r15));
+	//assign out[1] = o14;
+	assign out[1] = r14;
 	   
-	assign out[2] = ~(~in[0] & ~in[7]);
+	assign #5 out[2] = ~(~in[0] & ~in[7]);
 
-	assign out[3]  = ~(~in[0] & ~in[1] & in[7] & o14 & o15);
+	//assign out[3]  = ~(~in[0] & ~in[1] & in[7] & ~o14 & ~o15);
+	assign #5 out[3]  = ~(~in[0] & ~in[1] & in[7] & ~r14 & ~r15);
 
-	assign out[4]  = ~(~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] & ~in[11] + ~in[0] & ~in[2] & in[3] & ~in[11]);
+	assign #5 out[4]  = ~((~in[0] & ~in[2] & ~in[3] & ~in[4] & ~in[5] & ~in[6] & ~in[8] & ~in[9] & ~in[11]) | (~in[0] & ~in[2] & in[3]));
 endmodule	   

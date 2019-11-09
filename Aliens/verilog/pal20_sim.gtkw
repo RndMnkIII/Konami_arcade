@@ -1,0 +1,72 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Thu Oct 10 17:30:16 2019
+[*]
+[dumpfile] "C:\Users\javier\Documents\GitHub\Konami_arcade\Aliens\verilog\PAL16L8_053327_D20_TEST.vcd"
+[dumpfile_mtime] "Thu Oct 10 17:20:05 2019"
+[dumpfile_size] 264469
+[savefile] "C:\Users\javier\Documents\GitHub\Konami_arcade\Aliens\verilog\pal20_sim.gtkw"
+[timestart] 0
+[size] 1920 1057
+[pos] -1 -1
+*-8.000000 15 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] PAL16L8_053327_D20_TEST.
+[sst_width] 211
+[signals_width] 271
+[sst_expanded] 1
+[sst_vpaned_height] 315
+@200
+-Inputs:
+@28
+[color] 4
+PAL16L8_053327_D20_TEST.D18_5
+[color] 4
+PAL16L8_053327_D20_TEST.D21_17
+[color] 4
+PAL16L8_053327_D20_TEST.RMRD
+[color] 4
+PAL16L8_053327_D20_TEST.MAA
+[color] 4
+PAL16L8_053327_D20_TEST.MA9
+[color] 4
+PAL16L8_053327_D20_TEST.MA8
+[color] 4
+PAL16L8_053327_D20_TEST.MA7
+[color] 4
+PAL16L8_053327_D20_TEST.D21_12
+[color] 4
+PAL16L8_053327_D20_TEST.C20_6
+[color] 4
+PAL16L8_053327_D20_TEST.C20_3
+[color] 4
+PAL16L8_053327_D20_TEST.D21_15
+[color] 4
+PAL16L8_053327_D20_TEST.D21_16
+@200
+-
+-Outputs:
+@28
+[color] 6
+PAL16L8_053327_D20_TEST.C20_9
+[color] 6
+PAL16L8_053327_D20_TEST.IOCS
+[color] 6
+PAL16L8_053327_D20_TEST.CRAMCS
+[color] 6
+PAL16L8_053327_D20_TEST.VRAMCS
+[color] 6
+PAL16L8_053327_D20_TEST.OBJCS
+@200
+-
+-
+-Input Vector:
+@22
+PAL16L8_053327_D20_TEST.pald20.in[11:0]
+@200
+-
+-Output Vector:
+@23
+[color] 6
+PAL16L8_053327_D20_TEST.pald20.out[4:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -24,8 +24,9 @@ module PAL16L8_053326_D21_TEST;
 	  
 	for (x=0; x < 1023; x= x+1)
 		begin
-			#10 ; {AS, BK4, INIT, MAF, MAE, MAD, MAC, MAB, MAA, WOCO} = x;
+    //Suponemos un periodo máximo de 1/25MHz
+			#40 ; {AS, BK4, INIT, MAF, MAE, MAD, MAC, MAB, MAA, WOCO} = x;
 		end // end of for loop 
-      #10 $finish;
+      #40 $finish;
     end
 endmodule
