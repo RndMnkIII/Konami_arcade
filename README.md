@@ -31,6 +31,6 @@ https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/verilog/PAL16L8_05
 ![](/Aliens/verilog/gtkwave_pal21_sim.png?raw=true "GTKWave PAL16L8 D21")
 
 ### Added 11/11/2019: Socketed board with test points labels:
-![](/Aliens/Documentation/photos/socketed ICs/Socketed_Board_TestPoints.png?raw=true "Socketed Aliens board")
+![](/Aliens/Documentation/photos/socketed&nbsp;ICs/Socketed_Board_TestPoints.png?raw=true "Socketed Aliens board")
 
 
