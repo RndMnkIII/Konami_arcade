@@ -1,0 +1,33 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Wed Jan 15 20:27:00 2020
+[*]
+[dumpfile] "D:\proyectoKonamiAliens\AliensBusControl\AliensBusControl_TB_CAPTURED_async.vcd"
+[dumpfile_mtime] "Wed Jan 15 20:07:26 2020"
+[dumpfile_size] 736055
+[savefile] "D:\proyectoKonamiAliens\AliensBusControl\AliensBusControl_TB_CAPTURED_async.gtkw"
+[timestart] 196464000
+[size] 1920 1057
+[pos] -113 -113
+*-20.391594 26580000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 211
+[signals_width] 110
+[sst_expanded] 1
+[sst_vpaned_height] 315
+@28
+AliensBusControl_TB_CAPTURED_async.NCLK12
+AliensBusControl_TB_CAPTURED_async.CKE
+AliensBusControl_TB_CAPTURED_async.CKQ
+@22
+AliensBusControl_TB_CAPTURED_async.ADDR[15:0]
+@28
+AliensBusControl_TB_CAPTURED_async.RWb
+AliensBusControl_TB_CAPTURED_async.AS
+@29
+AliensBusControl_TB_CAPTURED_async.DTAC2
+AliensBusControl_TB_CAPTURED_async.DTACgen
+@28
+AliensBusControl_TB_CAPTURED_async.CRAMCS
+AliensBusControl_TB_CAPTURED_async.CRAMCSgen
+[pattern_trace] 1
+[pattern_trace] 0
