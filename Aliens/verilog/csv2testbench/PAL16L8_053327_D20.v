@@ -5,7 +5,8 @@
 //---------------------------------------------------------
 //Dumped from an unsecured PAL16L8, 
 //converted to GAL16V8 with PALTOGAL 
-//and tested by Caius (@Caius63417737).
+//and tested by Caius (@caiusarcade).
+// https://jammarcade.net
 //---------------------------------------------------------
 `default_nettype none
 `timescale 1 ns / 100 ps
