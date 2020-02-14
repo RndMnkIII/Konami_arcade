@@ -1,11 +1,12 @@
-//PAL16L8_053326_D21.v
+//PAL16L8_053327_D20.v
 //Implementation of PAL 053327-D20 combinatorial logic
 //used in Aliens Konami Arcade PCB.
 //Converted to Verilog By RndMnkIII. 10/2019. (@RndMnkIII).
 //---------------------------------------------------------
 //Dumped from an unsecured PAL16L8, 
 //converted to GAL16V8 with PALTOGAL 
-//and tested by Caius (@Caius63417737).
+//and tested by Caius (@caiusarcade).
+// https://jammarcade.net
 //---------------------------------------------------------
 `default_nettype none
 `timescale 1 ns / 100 ps
