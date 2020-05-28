@@ -33,4 +33,7 @@ https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/verilog/PAL16L8_05
 ### Added 11/11/2019: Socketed board with test points labels:
 ![](/Aliens/Documentation/photos/socketed%20ICs/Socketed_Board_TestPoints.png?raw=true "Socketed Aliens board")
 
+### Added 28/05/2020: Aliens (non merged Rom Set 3) MRA for MiSTer:
+https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/hardware/roms/aliens3.mra
+
 
