@@ -3,31 +3,31 @@
     <name>aliens3</name>
     <rbf>konami_aliens</rbf>
     <setname>aliens3</setname>
-    <rom index="0" zip="aliens3.zip" type="nonmerged" md5="333bd10d852864dc5d221b2eef08ed23">
+    <rom index="0" zip="aliens3.zip" type="nonmerged" md5="3f4b2760c9b185222db86aa271cdb83e">
     <!-- All ROMs fit nicely into 4MBytes address space (addr[21:0]) and 256Kb BLOCK boundary-->
 
         <!-- BLOCK 0X0 : CODE + BANK + PRIORITY ROMS -->
         <!-- Main CPU Konami-2 (052526) = 32Kbytes 0x8000 bytes at offset 0x8000 of 875_w3_1.c24 ROM -->
-        <interleave output="16">
+        <!-- <interleave output="16"> -->
             <!-- <part name="875_w3_2.e24" crc="3c0006fb" offset="0x8000" length="0x8000" map="12"/> -->
             <part name="875_w3_2.e24" crc="3c0006fb" offset="0x8000" length="0x8000"/>
-        </interleave>
+        <!-- </interleave> -->
 
         <!-- ROM banks = 20 BANKS mapped at 0x2000-0x3fff Main CPU address window: (LOWER (h00-h0f) 16 x 8KBytes of 875_w3_2.e24 ROM  + UPPER (h10-h13) 4 x 8Kbytes first 0x8000 bytes of 875_w3_1.c24 ROM -->
-        <interleave output="16">
+        <!-- <interleave output="16"> -->
             <!-- <part name="875_w3_1.c24" crc="f917f7b5" map="12"/> -->
             <part name="875_w3_1.c24" crc="f917f7b5"/>
-        </interleave>
-        <interleave output="16">
+        <!-- </interleave> -->
+        <!-- <interleave output="16"> -->
             <!-- <part name="875_w3_2.e24" crc="3c0006fb" offset="0x0" length="0x8000" map="12"/> -->
             <part name="875_w3_2.e24" crc="3c0006fb" offset="0x0" length="0x8000"/>
-        </interleave>
+        <!-- </interleave> -->
 
         <!-- audiocpu (Z80A) -->
-        <interleave output="16">
+        <!-- <interleave output="16"> -->
             <!-- <part name="875_b03.g04" crc="1ac4d283" length="0x8000" map="12"/> -->
             <part name="875_b03.g04" crc="1ac4d283" length="0x8000"/>
-        </interleave>
+        <!-- </interleave> -->
 
         <!-- Priority encoder PROM: AM27S21APC 1024 (256 X 4bit words) DIP Bipolar PROM 30ns-->
         <!-- https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/hardware/AM27S21APC.pdf -->
