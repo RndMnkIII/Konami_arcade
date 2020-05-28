@@ -12,9 +12,12 @@ Outputs:
 17 (Combinatorial, Output feedback output, Active low)
 18 (Combinatorial, Output feedback output, Active low)
 19 (Combinatorial, No output feedback, Active low)
-
+//i3 INIT
+//i2 BK4
+//i1 AS
 Equations:
-
+//D21_12 = ~(~MAF & ~MAE & ~MAD & ~MAC & ~MAB & ~MAA & WOCO)
+//D21_12 = ~((0000-03FF) & WOCO)
 /o12 = /i4 & /i5 & /i6 & /i7 & /i8 & /i9 & i11
 o12.oe = vcc
 
@@ -30,12 +33,17 @@ o14.oe = vcc
 /o15 = /i1 & /i4 & i5 & /i6 & i7 & i8 & i9
 o15.oe = vcc
 
+//D21_16 = ~(INIT & ~MAF & MAE & MAD & MAC & MAB)
+//D21_16 = ~(INIT & (7800-7FFF))
 /o16 = i3 & /i4 & i5 & i6 & i7 & i8
 o16.oe = vcc
 
+//D21_17 = ~( (~AS & ~MAF & MAE) | (~AS & ~MAF & ~MAE & ~MAD & ~MAC & ~MAB & ~MAA & WOCO))
+//D21_17 = ~( (~AS & (4000-7FFF) | ( ~AS & (0-03FF) & WOCO))
 /o17 = /i1 & /i4 & i5 +
        /i1 & /i4 & /i5 & /i6 & /i7 & /i8 & /i9 & i11
 o17.oe = vcc
+
 
 /o18 = /i1 & i4 +
        /i1 & i2 & /i4 & /i5 & i6

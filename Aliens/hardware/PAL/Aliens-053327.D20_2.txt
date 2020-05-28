@@ -25,6 +25,8 @@ o14.oe = vcc
        /i1 & /i3 & i4 & /i16
 o15.oe = vcc
 
+//CRAMCS = ~(  (~AS & (4000-7FFF) | ( ~AS & (0-03FF) & WOCO) & ((0000-03FF) & WOCO))
+////CRAMCS = ~( ~D21_17 &  ~D21_12)
 /o17 = /i1 & /i8
 o17.oe = vcc
 
