@@ -1,7 +1,7 @@
 <!-- Created by @RndMnkIII . 28/05/2020-->
 <misterromdescription>
     <name>aliens3</name>
-    <rbf>konami_aliens</rbf>
+    <rbf>core_placeholder</rbf>
     <setname>aliens3</setname>
     <rom index="0" zip="aliens3.zip" type="nonmerged" md5="3f4b2760c9b185222db86aa271cdb83e">
     <!-- All ROMs fit nicely into 4MBytes address space (addr[21:0]) and 256Kb BLOCK boundary-->
