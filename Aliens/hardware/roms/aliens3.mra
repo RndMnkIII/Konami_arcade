@@ -3,7 +3,7 @@
     <name>aliens3</name>
     <rbf>core_placeholder</rbf>
     <setname>aliens3</setname>
-    <rom index="0" zip="aliens3.zip" type="nonmerged" md5="3f4b2760c9b185222db86aa271cdb83e">
+    <rom index="0" zip="aliens3.zip" type="nonmerged" md5="none">
     <!-- All ROMs fit nicely into 4MBytes address space (addr[21:0]) and 256Kb BLOCK boundary-->
 
         <!-- BLOCK 0X0 : CODE + BANK + PRIORITY ROMS -->
