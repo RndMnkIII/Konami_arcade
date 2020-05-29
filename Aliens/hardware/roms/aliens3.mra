@@ -32,10 +32,10 @@
         <!-- Priority encoder PROM: AM27S21APC 1024 (256 X 4bit words) DIP Bipolar PROM 30ns-->
         <!-- https://github.com/RndMnkIII/Konami_arcade/blob/master/Aliens/hardware/AM27S21APC.pdf -->
         <!-- In Aliens only used the first 128 words (addr[6:0]) and only the two LSB outputs Q[1:0] -->
-        <part name="821a08.h14" crc="7da55800"/>
+        <part name="821a08.h14" crc="7da55800" length="0x100"/>
        
-        <!-- 32640 bytes fill to pretty align to 256Kbytes BLOCK boundary-->
-        <part repeat="0x7F80">00</part>
+        <!-- 32512 bytes fill to pretty align to 256Kbytes BLOCK boundary-->
+        <part repeat="0x7F00">00</part>
 
         <!-- BLOCK 0X1 : AUDIO SAMPLES ROM -->
         <!-- 007232 audio samples -->
