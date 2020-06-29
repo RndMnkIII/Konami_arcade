@@ -1,0 +1,38 @@
+Para ejecutar sesion de depuración con GDBGUI:
+
+gdbgui 'mame64d -window -sound none -video none -nothrottle aliens3'
+
+gdbgui 'aliens64d -window -sound none -debug -nothrottle aliens3'
+gdbgui 'aliens64d -window -sound none -nothrottle aliens3'
+
+compilación para soporte de depuración:
+usar REGENIE=1 solo cuando se modificación parámetros del build (p.e. cambiar de  SDL-based a native windows renderer ).
+make SUBTARGET=aliens SOURCES=src/mame/drivers/aliens.cpp TOOLS=1 DEBUG=1  SYMBOLS=1 SYMLEVEL=3 OPTIMIZE=0 REGENIE=0 -j5 (nº de cpu's + 1)
+make SUBTARGET=parodius SOURCES=src/mame/drivers/parodius.cpp TOOLS=1 DEBUG=1  SYMBOLS=1 SYMLEVEL=3 OPTIMIZE=0 REGENIE=0 -j5
+Redirect stderr to file: command 2>Subr_call_list.txt
+aliens64d -window -sound none -nothrottle aliens3 2>Subr_call_list.txt
+
+GUIA GDB
+--------
+ayuda comandos, ejemplo: help list
+
+Habilitar/deshabilitar puntos de interrupción: enable/disable
+listado de breakpoints: info breakpoints
+breakpoint antes de ejecutar linea n: b n
+condición para breakpoint número n: condition n <expresión> 
+ejemplo de expresión: y == 999
+breakpoint condicional en un único comando: b 29 if (y == 999)
+borrar condicion de un breakpoint: condition n (añadimos una condición vacia para el numero de breakpoint), p.e.: condition 4
+imprimir valor de una expresion: p table[y].data + 1
+p sizeof(struct data_unit)
+p *table[0].next
+p table[0].next->data
+
+iniciar ejecución del programa: run ó r
+continuar hasta siguiente punto de parada: continue ó c
+ejecutar siguiente linea de codigo: next ó n
+ejecutar siguiente linea introduciendose dentro de las funciones llamadas: step ó s
+ver la pila de llamadas: where
+moverse en la pila de llamadas: up/down
+visualizar codigo fuente: list ó l
+ejemplo: list main
