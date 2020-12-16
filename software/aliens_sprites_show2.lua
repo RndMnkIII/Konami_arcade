@@ -6,7 +6,13 @@
 
 -- How to use: place a copy of aliens_sprites_show.lua file inside main mame folder and 
 -- execute from command line: mame64 aliens3 -window -nofilter -resolution0 1152x896 -autoboot_script aliens_sprites_show2.lua
--- CAUTION: ALL ARRAYS ARE 1-BASED INDEX
+-- execute from command line: mame64 aliens3 -window -nofilter -resolution0 864x672 -autoboot_script aliens_sprites_show2.lua
+-- execute from command line: mame64 aliens3 -window -nofilter -resolution0 576x448 -autoboot_script aliens_sprites_show2.lua
+-- execute from command line: mame64 aliens3 -window -nofilter -resolution0 288x224 -autoboot_script aliens_sprites_show2.lua
+-- NOTES: 
+--  * In LUA the array indexes are 1-based
+--  * screen:draw_box(x1, y1, x2, y2, fillcol, linecol) - draw box from (x1, y1)-(x2, y2) colored linecol IS INCORRECT,
+--    draw box from (x1, y1)-(x2-1, y2-1), all drawing commands are adjusted for this.
 
 -- screen object reference
 SCR = manager:machine().screens[":screen"]
@@ -34,12 +40,15 @@ SPRAM_ENTRY_SIZE = 8; --Each sprite uses 8 bytes for attributes
 --  (Xorigin_MIN, Yorigin_MIN)-------------------------           (Xdest_MIN, Ydest_MIN)------------------------
 --
 Xorigin_MIN = 112
-Xorigin_MAX = 399
 Yorigin_MIN = 16
+
+Xorigin_MAX = 399
 Yorigin_MAX = 239
+-----------------------------------------------------------------------------------------------------------------
 Xdest_MIN = 0
-Xdest_MAX = 287
 Ydest_MIN = 223
+
+Xdest_MAX = 287
 Ydest_MAX = 0
 --
 --  Calculate scaling factors Sx, Sy:
@@ -64,19 +73,14 @@ SPR_WIDTH = 16
 SPR_HEIGHT = 16
 
 SPR_TRANSPARENCY = 0X50
-idx = 1
-for i=255,0,-2 do
-    SPR_COLORS[idx] = {}
-    SPR_COLORS[idx].r = math.random(0,255)
-    SPR_COLORS[idx].g = math.random(0,255)
-    SPR_COLORS[idx].b = math.random(0,255)
-    idx = idx + 1
-    --print(string.format("%02X-%02X-%02X", SPR_COLORS[color_idx].r, SPR_COLORS[color_idx].g, SPR_COLORS[color_idx].b))
+for idx=0,SPR_NUM_SPRITES-1,1 do
+    SPR_COLORS[idx] = (SPR_TRANSPARENCY << 24) + (math.random(0,255) << 16) + (math.random(0,255) << 8) + math.random(0,255)
 end
 
 --Sprites array
 SPRITES_TABLE = {}
-max_sprites_on_scanline = -1
+spr_sorted = {}
+max_sprites_on_scanline = 0
 
 --Sprite Xoffset values
 --Sprite Yoffset values
@@ -115,11 +119,8 @@ function Read_sprite_data()
     return
 end
 
-function Draw_sprites_boxes()
-    Read_sprite_data()
-
+function Sort_sprites()
     --Create sorted list of sprites by
-    spr_sorted = {}
     for i=1,SPR_NUM_SPRITES,1 do
         spr_sorted[i]=-1
     end
@@ -128,13 +129,21 @@ function Draw_sprites_boxes()
             spr_sorted[SPRITES_TABLE[i].priority+1]=i
         end
     end
+end
+function Draw_sprites_boxes()
+    --Read_sprite_data()
+    --Sort_sprites()
+
     total_sprites_on_screen = 0
+
+    --SCR:draw_box(0,0,287,223,0xff777777,0)
+
     for i=1,SPR_NUM_SPRITES,1 do
         j = spr_sorted[i]
 
         if j ~= -1 then
             spr_px, spr_py = xform(SPRITES_TABLE[j].x, SPRITES_TABLE[j].y)
-            spr_px2, spr_py2 = xform((SPRITES_TABLE[j].x + SPRITES_TABLE[j].w * SPR_WIDTH-1), (SPRITES_TABLE[j].y - SPRITES_TABLE[j].h * SPR_HEIGHT-1))
+            spr_px2, spr_py2 = xform((SPRITES_TABLE[j].x + SPRITES_TABLE[j].w * SPR_WIDTH-1), (SPRITES_TABLE[j].y - SPRITES_TABLE[j].h * SPR_HEIGHT+1))
             spr_mx = (spr_px2 - spr_px)//2 + spr_px
             spr_my = (spr_py2 - spr_py)//2 + spr_py
 
@@ -143,10 +152,10 @@ function Draw_sprites_boxes()
                 spr_color = 0x66ff0000; --Sprites with zoomlevel different from 0 are drawn red.
                 text_str = string.format("ZX:%d ZY:%d", SPRITES_TABLE[j].zoomx, SPRITES_TABLE[j].zoomy)
             else
-                spr_color = (SPR_TRANSPARENCY<<24) +  (SPR_COLORS[j].r << 16) + (SPR_COLORS[j].g << 8) + SPR_COLORS[j].b
+                spr_color = SPR_COLORS[j]
                 text_str = string.format("Pri:%d", SPRITES_TABLE[j].priority)
             end
-            SCR:draw_box(spr_px, spr_py, spr_px2, spr_py2,spr_color, 0)
+            SCR:draw_box(spr_px, spr_py, spr_px2+1, spr_py2+1,spr_color, 0)
             total_sprites_on_screen = total_sprites_on_screen + 1
             for hy=0,(SPRITES_TABLE[j].h-1),1 do
                 for wx=0,(SPRITES_TABLE[j].w-1),1 do
@@ -163,29 +172,55 @@ function Draw_sprites_boxes()
     --SCR:draw_text(5, 26, string.format("Total:%d", total_sprites_on_screen), 0xffff00ff)
     SCR:draw_box(5,28,133,32,0,0xffffffff)
     SCR:draw_box(6,29,6+total_sprites_on_screen,31,0xffffff00,0)
-    Check_MaxSpritesPerScanline()
+    --Check_MaxSpritesPerScanline()
     return
 end
 
-
+scanlines = {}
 function Check_MaxSpritesPerScanline()
-    if SCR:frame_number() > 600 then
-        --Read_sprite_data()
-        activate=0
-        scanlines = {}
-        for i=1,224,1 do
-            scanlines[i]=0
-        end
+    if SCR:frame_number() > 300 then
+        Read_sprite_data()
+        Sort_sprites()
 
-        for scanline =1,224 do
+        Draw_sprites_boxes()
+
+        scanlines = nil
+        scanlines = {}
+        emu.pause()
+        for i=1,224,1 do
+            scanlines[i]=nil
+        end
+        
+        for scanline =1,224,1 do
+            scanlines[scanline]={}
+            scanlines[scanline].cnt = 0
+            scanlines[scanline].coordinates = {}
+
             for i=1,SPR_NUM_SPRITES,1 do
-                if SPRITES_TABLE[i].active then
-                    activate=1
-                    spr_py = Ydest_MIN + Yorigin_MIN - SPRITES_TABLE[i].y
-                    spr_py2 = Ydest_MIN + Yorigin_MIN - (SPRITES_TABLE[i].y - SPRITES_TABLE[i].h * SPR_HEIGHT-1)
-                    if ((scanline-1) >= spr_py) and ((scanline-1) <= spr_py2) then
-                        scanlines[scanline] = scanlines[scanline] + SPRITES_TABLE[i].w
+                local j = spr_sorted[i]
+                if j ~= -1 then
+                    --if SPRITES_TABLE[j].active then
+                    spr_px, spr_py = xform(SPRITES_TABLE[j].x, SPRITES_TABLE[j].y)
+
+                    for hy=0,(SPRITES_TABLE[j].h-1),1 do
+                        for wx=0,(SPRITES_TABLE[j].w-1),1 do
+                            px3 = spr_px + wx * SPR_WIDTH
+                            px4 = px3+SPR_WIDTH-1
+                            py3 = spr_py + hy * SPR_HEIGHT
+                            py4 = py3 + SPR_HEIGHT-1
+
+                            if not((px4 < 0) or (px3 > 287) or (py4 < 0) or (py3 > 223)) then
+                                -- It's not completely outside of drawing area
+                                if ((scanline-1) >= py3) and ((scanline-1) <= py4) then
+                                    scanlines[scanline].cnt = scanlines[scanline].cnt + 1
+                                    scanlines[scanline].coordinates[scanlines[scanline].cnt]={}
+                                    scanlines[scanline].coordinates[scanlines[scanline].cnt].x=px3
+                                    scanlines[scanline].coordinates[scanlines[scanline].cnt].y=py3
+                                end
+                            end
+                        end
                     end
+                    --end
                 end
             end
         end
@@ -193,20 +228,34 @@ function Check_MaxSpritesPerScanline()
         --Check number of 16x16 boxes per scanline, a sprite can be until a 64 boxes group
         max_count_scanline = 0
         max_spr_count = 0
+        --max_sprites_on_scanline = 0
+
         for i=1,224,1 do
-            if scanlines[i] >= max_spr_count then
-                max_spr_count = scanlines[i]
+            if scanlines[i].cnt > max_spr_count then
+                max_spr_count = scanlines[i].cnt
                 max_count_scanline = i
             end
         end
         if max_spr_count > max_sprites_on_scanline then
             max_sprites_on_scanline = max_spr_count
         end
-        --Draw line and sprite count
-        SCR:draw_box(1, max_count_scanline-1, 288, max_count_scanline,0xff00ffff,0)
-        SCR:draw_text(5, 2, string.format("LINE:%d SPR#:%d/%d",max_count_scanline, max_spr_count,max_sprites_on_scanline), 0xffff00ff)
-        --SCR:draw_text(5,14, tostring(SCR:frame_number()), 0xffff00ff)
+
+        if max_spr_count  > 0 then
+            --Draw line and sprite count
+            SCR:draw_line(0, max_count_scanline-1, 287, max_count_scanline-1,0xff00ff00)
+            for i=1, scanlines[max_count_scanline].cnt, 1 do
+                SCR:draw_box(scanlines[max_count_scanline].coordinates[i].x,
+                scanlines[max_count_scanline].coordinates[i].y,
+                scanlines[max_count_scanline].coordinates[i].x + SPR_WIDTH,
+                scanlines[max_count_scanline].coordinates[i].y + SPR_HEIGHT,
+                0x99ffffff, 0xffff00ff)
+            end
+            SCR:draw_text(5, 2, string.format("LINE:%d SPR#:%d/%d",max_count_scanline, max_spr_count,max_sprites_on_scanline), 0xffff00ff)
+            SCR:draw_text(5,14, tostring(SCR:frame_number()), 0xffff00ff)
+        end
     end
+    emu.unpause()
 end
-emu.register_frame_done(Draw_sprites_boxes, "frame")
---emu.register_frame_done(Check_MaxSpritesPerScanline, "frame")
+
+--emu.register_frame_done(Draw_sprites_boxes, "frame")
+emu.register_frame_done(Check_MaxSpritesPerScanline, "frame")
