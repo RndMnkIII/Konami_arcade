@@ -73,7 +73,7 @@ SPR_WIDTH = 16
 SPR_HEIGHT = 16
 
 SPR_TRANSPARENCY = 0X50
-for idx=0,SPR_NUM_SPRITES-1,1 do
+for idx=1,SPR_NUM_SPRITES,1 do
     SPR_COLORS[idx] = (SPR_TRANSPARENCY << 24) + (math.random(0,255) << 16) + (math.random(0,255) << 8) + math.random(0,255)
 end
 
