@@ -81,6 +81,7 @@ end
 SPRITES_TABLE = {}
 spr_sorted = {}
 max_sprites_on_scanline = 0
+max_spr_per_frame = 0
 
 --Sprite Xoffset values
 --Sprite Yoffset values
@@ -230,7 +231,9 @@ function Check_MaxSpritesPerScanline()
         max_spr_count = 0
         --max_sprites_on_scanline = 0
 
+        total_spr_per_frame=0
         for i=1,224,1 do
+            total_spr_per_frame = total_spr_per_frame + scanlines[i].cnt
             if scanlines[i].cnt > max_spr_count then
                 max_spr_count = scanlines[i].cnt
                 max_count_scanline = i
@@ -238,6 +241,9 @@ function Check_MaxSpritesPerScanline()
         end
         if max_spr_count > max_sprites_on_scanline then
             max_sprites_on_scanline = max_spr_count
+        end
+        if total_spr_per_frame > max_spr_per_frame then
+            max_spr_per_frame = total_spr_per_frame
         end
 
         if max_spr_count  > 0 then
@@ -250,7 +256,7 @@ function Check_MaxSpritesPerScanline()
                 scanlines[max_count_scanline].coordinates[i].y + SPR_HEIGHT,
                 0x99ffffff, 0xffff00ff)
             end
-            SCR:draw_text(5, 2, string.format("LINE:%d SPR#:%d/%d",max_count_scanline, max_spr_count,max_sprites_on_scanline), 0xffff00ff)
+            SCR:draw_text(5, 2, string.format("LINE:%d SPR#:%d/%d F:%d/%d",max_count_scanline, max_spr_count,max_sprites_on_scanline, total_spr_per_frame,max_spr_per_frame), 0xffff00ff)
             SCR:draw_text(5,14, tostring(SCR:frame_number()), 0xffff00ff)
         end
     end
