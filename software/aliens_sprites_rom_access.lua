@@ -2,7 +2,7 @@
 -- Author: @RndMnkIII
 -- Version: 1.0 (20/12/2020)
 -- Description:
--- This LUA script show statistics about sprite ROM accesses using a 4Kbytes window size
+-- This LUA script show statistics about sprite ROM accesses using a 2Kbytes window size
 
 
 -- How to use: place a copy of aliens_sprites_rom_access.lua file inside main mame folder and
